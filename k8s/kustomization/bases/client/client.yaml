@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: patient-client
+  labels:
+    app: patient-client
+spec:
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: client
+          image: starter/client-dev
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: dev-configmap
+          resources:
+            limits:
+              cpu: "400m"
+              memory: "800Mi"

@@ -4,8 +4,8 @@ version: v1beta11
 vars:
 - name: DB_MIGRATION_IMAGE_DEV
   value: starter/db-migration-dev
-- name: CLIENT_IMAGE
-  value: starter/client
+- name: CLIENT_IMAGE_DEV
+  value: starter/client-dev
 - name: SERVER_IMAGE
   value: starter/client
 
@@ -25,17 +25,35 @@ dev:
   # `dev.ports` specifies all ports that should be forwarded while `devspace dev` is running
   # Port-forwarding lets you access your application via localhost on your local machine
   ports:
-  # - imageSelector: ${IMAGE} # Select the Pod that runs our `${IMAGE}`
-  #   forward:
-  #   - port: 3000
+  - imageSelector: ${CLIENT_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
+    forward:
+    - port: 3000
 
   # `dev.open` tells DevSpace to open certain URLs as soon as they return HTTP status 200
   # Since we configured port-forwarding, we can use a localhost address here to access our application
-  # open:
-  # - url: http://localhost:3000
+  open:
+  - url: http://localhost:3000
 
   # `dev.sync` configures a file sync between our Pods in k8s and your local project files
   sync:
+    - imageSelector: ${CLIENT_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
+      localSubPath: ./@app/client
+      containerPath: /app/@app/client
+      excludePaths:
+        - .git/
+        - "**/node_modules"
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
     - imageSelector: ${DB_MIGRATION_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
       localSubPath: ./@app/db
       containerPath: /app/@app/db
@@ -116,6 +134,17 @@ profiles:
 #         context: ./@app/client
 
 images:
+  client-dev:
+    image: ${CLIENT_IMAGE_DEV}
+    injectRestartHelper: true
+    tags:
+      - latest
+      - 0.0.1
+      - dev-${DEVSPACE_GIT_COMMIT}
+      - random-####
+    dockerfile: ./docker/Dockerfile.client.dev
+    context: ./
+    rebuildStrategy: always
   db-migration-dev:
     image: ${DB_MIGRATION_IMAGE_DEV}
     injectRestartHelper: true

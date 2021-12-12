@@ -1,4 +1,5 @@
 bases:
+  - "./bases/client"
   - "./bases/pg"
   - "./bases/db"
 
