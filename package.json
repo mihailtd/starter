@@ -1,0 +1,30 @@
+{
+  "name": "starter",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Project Starter Template - Vue, Vite, Tailwind, Postgres, Postgraphile, Prisma, Cypress",
+  "author": {
+    "name": "Mihai Farcas",
+    "email": "farcasmihai91@gmail.com"
+  },
+  "scripts": {
+    "client": "yarn workspace @starter/client",
+    "db": "yarn workspace @starter/db",
+    "e2e": "yarn workspace @starter/e2e",
+    "gql": "yarn workspace @starter/gql",
+    "server": "yarn workspace @starter/server"
+  },
+  "workspaces": {
+    "packages": [
+      "@app/*"
+    ]
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^16.11.12",
+    "eslint": "^8.4.1",
+    "lerna": "^4.0.0",
+    "prettier": "^2.5.1",
+    "typescript": "^4.5.3"
+  }
+}

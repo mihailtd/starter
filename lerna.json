@@ -1,0 +1,7 @@
+{
+  "packages": ["@app/**"],
+  "version": "independent",
+  "loglevel": "warn",
+  "useWorkspaces": "true",
+  "npmClient": "yarn"
+}

@@ -1,0 +1,84 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: starter-db
+spec:
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.5-0
+  postgresVersion: 13
+  instances:
+    - name: pgha1
+      replicas: 1
+      dataVolumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 1Gi
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  postgres-operator.crunchydata.com/cluster: starter-db
+                  postgres-operator.crunchydata.com/instance-set: pgha1
+  backups:
+    pgbackrest:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.36-0
+      repos:
+      - name: repo1
+        volume:
+          volumeClaimSpec:
+            accessModes:
+            - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: 1Gi
+  # TODO: use pgBouncer when it's clear how to connect through it
+  # proxy:
+  #   pgBouncer:
+  #     image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.16-0
+  #     replicas: 2
+  #     affinity:
+  #       podAntiAffinity:
+  #         preferredDuringSchedulingIgnoredDuringExecution:
+  #         - weight: 1
+  #           podAffinityTerm:
+  #             topologyKey: kubernetes.io/hostname
+  #             labelSelector:
+  #               matchLabels:
+  #                 postgres-operator.crunchydata.com/cluster: starter-db
+  #                 postgres-operator.crunchydata.com/role: pgbouncer
+  users:
+    - name: postgres
+      databases:
+        - postgres
+    - name: starter-owner
+      databases:
+        - starter
+        - starter_shadow
+      options: "SUPERUSER"
+    - name: starter-shadow-owner
+      databases:
+        - starter
+        - starter_shadow
+      options: "SUPERUSER"
+    - name: starter-server
+      databases:
+        - starter
+      options: "NOINHERIT"
+    - name: starter-server-authenticator
+      databases:
+        - starter
+      options: "NOINHERIT"
+  databaseInitSQL:
+    key: init.sql
+    name: db-initialize-configmap
+  patroni:
+    dynamicConfiguration:
+      postgresql:
+        pg_hba:
+          # TODO: find a more secure way to do this
+          - "host all all 0.0.0.0/0 md5"

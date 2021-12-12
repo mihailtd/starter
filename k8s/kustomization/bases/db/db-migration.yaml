@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-migration
+  labels:
+    app: db-migration
+spec:
+  selector:
+    matchLabels:
+      app: db-migration
+  template:
+    metadata:
+      labels:
+        app: db-migration
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: db-migration
+          image: starter/db-migration-dev
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "300m"
+              memory: "300Mi"
+          env:
+            - name: ROOT_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: starter-db-pguser-postgres
+                  key: uri
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: starter-db-pguser-starter-owner
+                  key: uri
+            - name: SHADOW_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: starter-db-pguser-starter-shadow-owner
+                  key: uri
+

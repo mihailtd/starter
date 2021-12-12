@@ -1,0 +1,23 @@
+{
+  "name": "@starter/client",
+  "private": true,
+  "version": "0.0.0",
+  "description": "The VueJS Client for the Starter",
+  "homepage": "https://localhost:8000",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.2.24"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.10.2",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.4",
+    "tailwindcss": "^3.0.1",
+    "vite": "^2.7.1",
+    "vue-tsc": "^0.29.8"
+  }
+}

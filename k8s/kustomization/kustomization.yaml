@@ -1,0 +1,16 @@
+bases:
+  - "./bases/pg"
+  - "./bases/db"
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: dev-env-configmap
+    envs:
+      - .env
+  - name: db-initialize-configmap
+    files:
+      - init.sql
+
+namespace: starter
