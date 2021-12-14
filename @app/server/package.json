@@ -2,5 +2,37 @@
   "name": "@starter/server",
   "private": true,
   "version": "0.0.0",
-  "description": "The GraphQL Server for the Starter"
+  "description": "The GraphQL Server for the Starter",
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/index.js",
+    "dev": "tsc-watch --onSuccess 'node dist'",
+    "schema:export": "node node_modules/.bin/ts-node -O '{\"rootDir\":null}' scripts/schema-export.ts"
+  },
+  "dependencies": {
+    "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
+    "@graphile/pg-pubsub": "^4.12.2",
+    "chalk": "4.1.2",
+    "csurf": "^1.11.0",
+    "express": "^4.17.1",
+    "graphile-build": "^4.12.2",
+    "graphile-build-pg": "^4.12.2",
+    "graphile-utils": "^4.12.2",
+    "helmet": "^4.6.0",
+    "lodash": "^4.17.21",
+    "morgan": "^1.10.0",
+    "pg": "^8.7.1",
+    "postgraphile": "^4.12.5",
+    "tslib": "^2.3.1"
+  },
+  "devDependencies": {
+    "@types/csurf": "^1.11.2",
+    "@types/helmet": "^4.0.0",
+    "@types/lodash": "^4.14.178",
+    "@types/morgan": "^1.9.3",
+    "@types/node": "^16.11.12",
+    "@types/pg": "^8.6.1",
+    "ts-node": "^10.4.0",
+    "tsc-watch": "^4.5.0"
+  }
 }
