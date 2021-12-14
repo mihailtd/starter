@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": ".",
+    "outDir": "dist",
+    "tsBuildInfoFile": "tsconfig.tsbuildinfo",
+    "declarationDir": ".",
+    "lib": ["ESNext", "esnext.asynciterable"],
+    "target": "ESNext",
+    "module": "commonjs",
+    "jsx": "react"
+  },
+  "include": ["graphql.ts", "index.ts"]
+}

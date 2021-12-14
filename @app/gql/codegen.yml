@@ -1,0 +1,25 @@
+watch: false
+overwrite: true
+
+generates:
+  graphql.ts:
+    schema: "../../schemas/schema.graphql"
+    documents:
+    - "../client/src/queries/*.ts"
+    - "../client/src/**/*.graphql"
+    - "../client/src/**/*.gql"
+    plugins:
+      - add:
+          content:
+            - "/* DO NOT EDIT - this is an auto-generated file */"
+            - "/* eslint-disable @typescript-eslint/no-explicit-any */"
+            - "// eslint-disable-next-line @typescript-eslint/ban-ts-comment"
+            - "// @ts-nocheck"
+      - "typescript"
+      - "typescript-operations"
+      - "fragment-matcher"
+      - "typescript-vue-apollo"
+    config:
+      withCompositionFunctions: true
+      addDocBlocks: true
+      vueApolloComposableImportFrom: "@vue/apollo-composable"
