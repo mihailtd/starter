@@ -2,11 +2,11 @@
 
 Decisions:
 
-- Repository: Monorepo structure using [yarn workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) and managed by [lerna](https://lerna.io/) (to be replaced by [turborepo](https://turborepo.org/)
+- Repository: Monorepo structure using [yarn workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) and managed by [lerna](https://lerna.io/) (to be replaced by [Turborepo](https://turborepo.org/)
 - Modern JS Framework with an ultra-fast build system: [VueJS](https://vuejs.org/) for the client-side, built with [Vite](https://vitejs.dev/)
 - Functional/Utility Styles: Styles are handled by [TailwindCSS](https://tailwindcss.com/) and [PostCSS](https://postcss.org/)
 - Database: High availability [PostgreSQL](https://www.postgresql.org/) in k8s using [CruncyData PGO](https://crunchydata.com/products/crunchy-postgresql-operator/)
-- Server: Auto-generated GraphQL backend using [Postgraphile](https://www.graphile.org/)
+- Server: Auto-generated GraphQL backend using [PostGraphile](https://www.graphile.org/)
 - Database-driven development: everything starts with the database schema and the GraphQL backend is built from that
 - [Kubernetes](https://kubernetes.io/) for local development using [DevSpace](https://devspace.sh/) as well as deployment to [GKE](https://cloud.google.com/kubernetes-engine/)
 - Automation: CI/CD with [Gitlab CI/CD](https://docs.gitlab.com/) and E2E tests with [cypress](https://www.cypress.io/)

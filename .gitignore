@@ -8,5 +8,10 @@ dist
 dist-ssr
 *.local
 
+*.tsbuildinfo
+
+@app/gql/*.d.ts
+@app/gql/*.ts.map
+
 # Ignore DevSpace cache and log folder
 .devspace/
