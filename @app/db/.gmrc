@@ -61,7 +61,9 @@
    * these.
    */
   "placeholders": {
-    // ":DATABASE_VISITOR": "!ENV", // Uses process.env.DATABASE_VISITOR
+    ":SERVER_AUTHENTICATOR_ROLE": "!ENV", // Uses process.env.DATABASE_VISITOR
+    ":DB_SCHEMA_NAME": "!ENV", // Uses process.env.DATABASE_VISITOR
+    ":SERVER_ROLE": "!ENV" // Uses process.env.DATABASE_VISITOR
   },
 
   /*
@@ -87,16 +89,16 @@
     // "afterReset.sql",
     // { "_": "command", "command": "graphile-worker --schema-only" },
   ],
- 
+
   /*
    * afterAllMigrations: actions executed once all migrations are complete.
    */
   "afterAllMigrations": [
-    // {
-    //   "_": "command",
-    //   "shadow": true,
-    //   "command": "if [ \"$IN_TESTS\" != \"1\" ]; then ./scripts/dump-db; fi",
-    // },
+    {
+      "_": "command",
+      "shadow": true,
+      "command": "if [ \"$IN_TESTS\" != \"1\" ]; then ./scripts/dump-db; fi"
+    }
   ],
 
   /*
