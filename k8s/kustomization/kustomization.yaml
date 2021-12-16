@@ -2,6 +2,7 @@ bases:
   - "./bases/client"
   - "./bases/pg"
   - "./bases/db"
+  - "./bases/server"
 
 generatorOptions:
   disableNameSuffixHash: true

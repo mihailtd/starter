@@ -6,8 +6,8 @@ vars:
   value: starter/db-migration-dev
 - name: CLIENT_IMAGE_DEV
   value: starter/client-dev
-- name: SERVER_IMAGE
-  value: starter/client
+- name: SERVER_IMAGE_DEV
+  value: starter/server-dev
 
 # `deployments` tells DevSpace how to deploy this project
 deployments:
@@ -28,14 +28,57 @@ dev:
   - imageSelector: ${CLIENT_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
     forward:
     - port: 3000
+  - imageSelector: ${SERVER_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
+    forward:
+    - port: 8000
+  - labelSelector:
+      name: starter-db
+    forward:
+      - port: 5432
 
   # `dev.open` tells DevSpace to open certain URLs as soon as they return HTTP status 200
   # Since we configured port-forwarding, we can use a localhost address here to access our application
   open:
+  - url: http://localhost:8090
   - url: http://localhost:3000
+  - url: http://localhost:8000/graphiql
 
   # `dev.sync` configures a file sync between our Pods in k8s and your local project files
   sync:
+    - imageSelector: ${SERVER_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
+      localSubPath: ./@app/server
+      containerPath: /app/@app/server
+      excludePaths:
+        - .git/
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
+    - imageSelector: ${SERVER_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
+      localSubPath: ./schemas
+      containerPath: /app/schemas
+      excludePaths:
+        - .git/
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
     - imageSelector: ${CLIENT_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
       localSubPath: ./@app/client
       containerPath: /app/@app/client
@@ -72,8 +115,8 @@ dev:
         - "**/dist"
         - "**/__tests__"
     - imageSelector: ${DB_MIGRATION_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
-      localSubPath: ./data
-      containerPath: /app/data
+      localSubPath: ./schemas
+      containerPath: /app/schemas
       excludePaths:
         - .git/
       uploadExcludePaths:
@@ -120,6 +163,10 @@ dev:
   #   - op: remove
   #     path: spec.containers[0].securityContext
 
+commands:
+- name: commit-db-migration
+  command: "devspace enter yarn db commit --image-selector starter/db-migration-dev:latest"
+
 # `profiles` lets you modify the config above for different environments (e.g. dev vs production)
 profiles:
   # This profile is called `production` and you can use it for example using: devspace deploy -p production
@@ -134,6 +181,17 @@ profiles:
 #         context: ./@app/client
 
 images:
+  server-dev:
+    image: ${SERVER_IMAGE_DEV}
+    injectRestartHelper: true
+    tags:
+      - latest
+      - 0.0.1
+      - dev-${DEVSPACE_GIT_COMMIT}
+      - random-####
+    dockerfile: ./docker/Dockerfile.server.dev
+    context: ./
+    rebuildStrategy: always
   client-dev:
     image: ${CLIENT_IMAGE_DEV}
     injectRestartHelper: true

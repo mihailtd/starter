@@ -26,6 +26,7 @@ function parseError(error: Error): ParsedError {
     };
   }
 
+  console.error(error);
   // TODO: process certain errors
   const code = error["statusCode"] || error["status"] || error["code"];
   const codeAsFloat = Number(code);

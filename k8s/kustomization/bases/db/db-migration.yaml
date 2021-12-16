@@ -22,6 +22,9 @@ spec:
             limits:
               cpu: "300m"
               memory: "300Mi"
+          envFrom:
+            - configMapRef:
+                name: dev-env-configmap
           env:
             - name: ROOT_DATABASE_URL
               valueFrom:
@@ -38,4 +41,13 @@ spec:
                 secretKeyRef:
                   name: starter-db-pguser-starter-shadow-owner
                   key: uri
-
+            - name: SERVER_ROLE
+              valueFrom:
+                secretKeyRef:
+                  name: starter-db-pguser-starter-server
+                  key: user
+            - name: SERVER_AUTHENTICATOR_ROLE
+              valueFrom:
+                secretKeyRef:
+                  name: starter-db-pguser-starter-server-authenticator
+                  key: user

@@ -7,12 +7,12 @@ import { getPostGraphileOptions } from "../src/middleware/installPostGraphile";
 
 async function main() {
   const rootPgPool = new Pool({
-    connectionString: process.env.DATABASE_URL!,
+    connectionString: process.env.ROOT_DATABASE_URL!,
   });
   try {
     const schema = await createPostGraphileSchema(
-      process.env.AUTH_DATABASE_URL!,
-      "app_public",
+      process.env.DATABASE_AUTHENTICATOR_URL!,
+      process.env.DB_SCHEMA_NAME!,
       getPostGraphileOptions({ rootPgPool })
     );
     // TODO: fix type error

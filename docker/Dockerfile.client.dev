@@ -3,7 +3,7 @@ FROM node:17-alpine as build
 ENV NODE_ENV local
 WORKDIR /app
 
-COPY ./package.json ./yarn.lock ./
+COPY ./package.json ./yarn.lock ./tsconfig.json ./
 
 COPY ./@app/client/ ./@app/client
 

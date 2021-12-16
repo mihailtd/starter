@@ -20,7 +20,7 @@ spec:
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
-                name: dev-configmap
+                name: dev-env-configmap
           resources:
             limits:
               cpu: "400m"

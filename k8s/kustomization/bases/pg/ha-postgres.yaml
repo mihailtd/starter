@@ -7,6 +7,9 @@ spec:
   postgresVersion: 13
   instances:
     - name: pgha1
+      metadata:
+        labels:
+          name: starter-db
       replicas: 1
       dataVolumeClaimSpec:
         accessModes:

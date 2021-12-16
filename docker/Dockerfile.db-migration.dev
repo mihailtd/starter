@@ -4,7 +4,7 @@ ENV NODE_ENV local
 
 WORKDIR /app
 
-COPY ./package.json ./yarn.lock ./
+COPY ./package.json ./yarn.lock ./tsconfig.json ./
 COPY ./@app/db/package.json ./@app/db/package.json
 
 RUN apk upgrade && apk add bash

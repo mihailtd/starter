@@ -1,4 +1,4 @@
-import PgPubsub from "@graphile/pg-pubsub";
+// import PgPubsub from "@graphile/pg-pubsub";
 import PgSimplifyInflectorPlugin from "@graphile-contrib/pg-simplify-inflector";
 import { Express, Request, Response } from "express";
 import { NodePlugin } from "graphile-build";
@@ -50,12 +50,12 @@ function uuidOrNull(input: string | number | null | undefined): UUID | null {
   }
 }
 
-const isDev = process.env.NODE_ENV === "development";
-//const isTest = process.env.NODE_ENV === "test";
+const isDev = process.env.NODE_ENV === "local";
+// const isTest = process.env.NODE_ENV === "test";
 
 const pluginHook = makePluginHook([
   // Add the pub/sub realtime provider
-  PgPubsub,
+  // PgPubsub,
 ]);
 
 interface IPostGraphileOptionsOptions {
@@ -72,7 +72,7 @@ export function getPostGraphileOptions({
     pluginHook,
 
     // This is so that PostGraphile installs the watch fixtures, it's also needed to enable live queries
-    ownerConnectionString: process.env.DATABASE_URL,
+    ownerConnectionString: process.env.ROOT_DATABASE_URL,
 
     // On production we still want to start even if the database isn't available.
     // On development, we want to deal nicely with issues in the database.
@@ -148,7 +148,7 @@ export function getPostGraphileOptions({
     // Keep data/schema.graphql up to date
     sortExport: true,
     exportGqlSchemaPath: isDev
-      ? `${__dirname}/../../../../data/schema.graphql`
+      ? `${__dirname}/../../../../schemas/schema.graphql`
       : undefined,
 
     /*
@@ -194,7 +194,7 @@ export default function installPostGraphile(app: Express) {
   const rootPgPool = getRootPgPool(app);
   const middleware = postgraphile<Request, Response>(
     authPgPool,
-    process.env.POSTGRES_SCHEMA_NAME,
+    process.env.DB_SCHEMA_NAME,
     getPostGraphileOptions({
       websocketMiddlewares,
       rootPgPool,

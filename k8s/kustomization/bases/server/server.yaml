@@ -20,12 +20,17 @@ spec:
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
-                name: dev-configmap
+                name: dev-env-configmap
           resources:
             limits:
               cpu: "300m"
               memory: "600Mi"
           env:
+            - name: ROOT_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: starter-db-pguser-postgres
+                  key: uri
             - name: OWNER_DATABASE_URL
               valueFrom:
                 secretKeyRef:
@@ -36,11 +41,6 @@ spec:
                 secretKeyRef:
                   name: starter-db-pguser-starter-server
                   key: uri
-            - name: DATABASE_ROLE
-              valueFrom:
-                secretKeyRef:
-                  name: starter-db-pguser-starter-server
-                  key: user
             - name: DATABASE_AUTHENTICATOR_URL
               valueFrom:
                 secretKeyRef:
