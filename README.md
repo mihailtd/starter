@@ -39,8 +39,16 @@ Project structure:
 - The database is migrated in watch more, every time a new migration file is edited, and the database is updated with the new migration.
 - The GraphQL server is watching the database for changes and automatically updates the GraphQL schema.
 - TypeScript Types and GraphQL Helpers are auto-generated using [graphql-code-generator](https://www.graphql-code-generator.com). This is also running in watch mode, every time a new type is added to the schema, the type is updated in the TypeScript types file giving you instant intellisense, code completion and type checking.
+- The database and graphql schema files are stored in `schemas` folder. Even though these are auto-generated, it is reccomended that this is commited to the repository as you can then easily compare and diff and track the changes.
 
-## DB Migration
+## Database amd Migrations
+
+There are 4 database roles:
+
+1. `postgres` - the postgres user that has root privileges - used for local development when watching the database for changes (this is not used in production)
+2. `starter-owner` - this role owns the entire database, it runs all the migrations, owns the resulting schemas, tables and functions. This role is also used when function are run in `SECURITY DEFINER` mode.
+3. `starter-server-authenticator` - this is the role that the GraphQL server connect to the database with. It has minimal permissions - only enough to run the introspection queries and can assume the starter-server role and authenticate users
+4. `starter-server` - this is the role that the SQL queries are executed with and all the security policies should enforced for it (RBAC)
 
 Database migrations are handled by [Graphile Migrate](https://github.com/graphile/migrate)
 
@@ -68,3 +76,15 @@ Have DevSpace CLI installed.
   - Start the client application
   - Opens the urls in the browser
 - Run `devspace purge` to remove all the resources that were installed in kubernetes, except the ones installed manually.
+
+## TO-DO
+
+1. [TODO] initialize SQL is not working
+2. [TODO] use PgBouncer to handle connections to the DB
+3. [TODO] use TLS for the DB connection
+4. [TODO] define the IP in pg_hba.conf
+5. [TODO] define a better eslint config
+
+# Known issues and quirks
+
+1. Database migrations can't easily be rolled back. This is the case for most SQL migrations as they involve migrating the data as well as the schema. The solution is to create a new migration file that contains the rollback statements.

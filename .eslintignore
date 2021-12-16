@@ -1,0 +1,4 @@
+node_modules
+**/dist
+/schemas/schema.graphql
+/schemas/schema.sql
