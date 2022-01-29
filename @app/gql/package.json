@@ -3,11 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "description": "The GraphQL Generators for the Starter",
-  "main": "/dist/index.js",
+  "main": "dist/graphql.js",
+  "typings": "graphql.d.ts",
   "scripts": {
     "codegen": "graphql-codegen --config codegen.yml",
     "build": "yarn codegen && tsc -b",
-    "watch": "yarn codegen --watch"
+    "watch": "yarn codegen --watch & tsc -b -w"
   },
   "devDependencies": {
     "@graphql-codegen/add": "^3.1.1",
