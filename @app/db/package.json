@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "description": "The Prisma DB Migrations for the Starter",
   "scripts": {
-    "gm": "node node_modules/.bin/graphile-migrate",
-    "migrate": "node node_modules/.bin/graphile-migrate migrate",
+    "gm": "yarn graphile-migrate",
+    "migrate": "yarn gm migrate",
     "watch": "yarn gm watch",
     "commit": "yarn gm commit",
     "uncommit": "yarn gm uncommit",
