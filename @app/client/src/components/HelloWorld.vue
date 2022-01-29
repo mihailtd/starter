@@ -1,9 +1,24 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useUserQuery, UserQueryVariables } from "@starter/gql";
+import { useResult } from "@vue/apollo-composable";
 
 defineProps<{ msg: string }>();
 
 const count = ref(0);
+
+// expample usage of graphql composables
+const userQueryVariables: UserQueryVariables = {
+  id: "1",
+};
+
+const { result, error, onError, loading } = useUserQuery(userQueryVariables, {
+  fetchPolicy: "network-only",
+});
+
+const user = useResult(result, null, (data) => {
+  return data.user;
+});
 </script>
 
 <template>
@@ -19,7 +34,9 @@ const count = ref(0);
   <p>See <code>README.md</code> for more information.</p>
 
   <p>
-    <a href="https://vitejs.dev/guide/features.html" target="_blank"> Vite Docs </a>
+    <a href="https://vitejs.dev/guide/features.html" target="_blank">
+      Vite Docs
+    </a>
     |
     <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Docs</a>
   </p>
