@@ -64,24 +64,7 @@ dev:
         - "**/node_modules"
         - "**/dist"
         - "**/__tests__"
-    - imageSelector: ${SERVER_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
-      localSubPath: ./@app/server
-      containerPath: /app/@app/server
-      excludePaths:
-        - .git/
-      uploadExcludePaths:
-        - .docker
-        - .env
-        - .vscode
-        - "@app/e2e"
-        - "*Dockerfile*"
-        - "*docker-compose*"
-        - "**/.DS_Store"
-        - "**/.next"
-        - "**/node_modules"
-        - "**/dist"
-        - "**/__tests__"
-    - imageSelector: ${SERVER_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
+    - imageSelector: ${GQL_IMAGE_DEV}
       localSubPath: ./schemas
       containerPath: /app/schemas
       excludePaths:
@@ -98,7 +81,58 @@ dev:
         - "**/node_modules"
         - "**/dist"
         - "**/__tests__"
-    - imageSelector: ${CLIENT_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
+    - imageSelector: ${GQL_IMAGE_DEV}
+      localSubPath: ./@app/client
+      containerPath: /app/@app/client
+      excludePaths:
+        - .git/
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
+    - imageSelector: ${SERVER_IMAGE_DEV}
+      localSubPath: ./@app/server
+      containerPath: /app/@app/server
+      excludePaths:
+        - .git/
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
+    - imageSelector: ${SERVER_IMAGE_DEV}
+      localSubPath: ./schemas
+      containerPath: /app/schemas
+      excludePaths:
+        - .git/
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
+    - imageSelector: ${CLIENT_IMAGE_DEV}
       localSubPath: ./@app/client
       containerPath: /app/@app/client
       excludePaths:
@@ -116,7 +150,7 @@ dev:
         - "**/node_modules"
         - "**/dist"
         - "**/__tests__"
-    - imageSelector: ${SERVER_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
+    - imageSelector: ${CLIENT_IMAGE_DEV}
       localSubPath: ./@app/gql
       containerPath: /app/@app/gql
       excludePaths:
@@ -131,9 +165,8 @@ dev:
         - "**/.DS_Store"
         - "**/.next"
         - "**/node_modules"
-        - "**/dist"
         - "**/__tests__"
-    - imageSelector: ${DB_MIGRATION_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
+    - imageSelector: ${DB_MIGRATION_IMAGE_DEV}
       localSubPath: ./@app/db
       containerPath: /app/@app/db
       excludePaths:
@@ -150,7 +183,7 @@ dev:
         - "**/node_modules"
         - "**/dist"
         - "**/__tests__"
-    - imageSelector: ${DB_MIGRATION_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
+    - imageSelector: ${DB_MIGRATION_IMAGE_DEV}
       localSubPath: ./schemas
       containerPath: /app/schemas
       excludePaths:

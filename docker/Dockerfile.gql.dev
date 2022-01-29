@@ -4,11 +4,12 @@ ENV NODE_ENV local
 
 WORKDIR /app
 
-COPY ./package.json ./yarn.lock ./
+COPY ./package.json ./yarn.lock ./tsconfig.json ./
 COPY ./@app/gql/package.json ./@app/gql/package.json
 
 RUN yarn install --pure-lockfile --non-interactive
 
 COPY ./@app/gql ./@app/gql
+COPY ./schemas ./schemas
 
 CMD ["yarn", "gql", "watch"]
