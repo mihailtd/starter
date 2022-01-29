@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: patient-client
+  name: client
   labels:
-    app: patient-client
+    app: client
 spec:
   selector:
     matchLabels:
