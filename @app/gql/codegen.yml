@@ -23,3 +23,4 @@ generates:
       withCompositionFunctions: true
       addDocBlocks: true
       vueApolloComposableImportFrom: "@vue/apollo-composable"
+      vueCompositionApiImportFrom: "vue"
