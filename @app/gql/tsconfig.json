@@ -11,5 +11,5 @@
     "module": "commonjs",
     "jsx": "react"
   },
-  "include": ["graphql.ts", "index.ts"]
+  "include": ["graphql.ts"]
 }

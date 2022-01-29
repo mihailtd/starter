@@ -4,6 +4,6 @@
   "version": "0.0.0",
   "description": "The Cypress e2e Tests for the Starter",
   "devDependencies": {
-    "cypress": "^9.1.1"
+    "cypress": "^9.3.1"
   }
 }

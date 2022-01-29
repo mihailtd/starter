@@ -193,6 +193,8 @@ export default function installPostGraphile(app: Express) {
   const authPgPool = getAuthPgPool(app);
   const rootPgPool = getRootPgPool(app);
   const middleware = postgraphile<Request, Response>(
+    // TODO: fix type issue here
+    // @ts-ignore
     authPgPool,
     process.env.DB_SCHEMA_NAME,
     getPostGraphileOptions({

@@ -4,9 +4,6 @@ if [ "$GM_DBURL" = "" ]; then
   exit 1;
 fi
 
-export COMPOSE_PROJECT_NAME
-
-# When ran inside docker-compose we need to be able to run a different pg_dump binary
 ${PG_DUMP:-pg_dump} \
   --no-sync \
   --schema-only \
