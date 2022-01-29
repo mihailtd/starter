@@ -8,7 +8,7 @@
     "declarationDir": ".",
     "lib": ["ESNext", "esnext.asynciterable"],
     "target": "ESNext",
-    "module": "commonjs",
+    "module": "ESNext",
     "jsx": "react"
   },
   "include": ["graphql.ts"]
