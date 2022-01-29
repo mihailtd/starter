@@ -15,8 +15,10 @@ declare module "express-serve-static-core" {
 
 export default (app: Express) => {
   const middleware: RequestHandler = (req, res, next) => {
-    req.isSameOrigin =
-      !req.headers.origin || req.headers.origin === process.env.ROOT_URL;
+    const baseUrl = process.env.ROOT_URL?.replace(/^https?:\/\//, "") || "don't allow";
+    console.log(baseUrl)
+    req.isSameOrigin = 
+      !req.headers.origin || req.headers.origin.indexOf(baseUrl) > -1;
     next();
   };
   app.use(middleware);
