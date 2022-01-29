@@ -1,0 +1,14 @@
+FROM node:17-alpine
+
+ENV NODE_ENV local
+
+WORKDIR /app
+
+COPY ./package.json ./yarn.lock ./
+COPY ./@app/gql/package.json ./@app/gql/package.json
+
+RUN yarn install --pure-lockfile --non-interactive
+
+COPY ./@app/gql ./@app/gql
+
+CMD ["yarn", "gql", "watch"]

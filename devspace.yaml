@@ -8,6 +8,8 @@ vars:
   value: starter/client-dev
 - name: SERVER_IMAGE_DEV
   value: starter/server-dev
+- name: GQL_IMAGE_DEV
+  value: starter/gql-dev
 
 # `deployments` tells DevSpace how to deploy this project
 deployments:
@@ -45,6 +47,23 @@ dev:
 
   # `dev.sync` configures a file sync between our Pods in k8s and your local project files
   sync:
+    - imageSelector: ${GQL_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
+      localSubPath: ./@app/gql
+      containerPath: /app/@app/gql
+      excludePaths:
+        - .git/
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
     - imageSelector: ${SERVER_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
       localSubPath: ./@app/server
       containerPath: /app/@app/server
@@ -85,6 +104,23 @@ dev:
       excludePaths:
         - .git/
         - "**/node_modules"
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
+    - imageSelector: ${SERVER_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
+      localSubPath: ./@app/gql
+      containerPath: /app/@app/gql
+      excludePaths:
+        - .git/
       uploadExcludePaths:
         - .docker
         - .env
@@ -212,5 +248,16 @@ images:
       - dev-${DEVSPACE_GIT_COMMIT}
       - random-####
     dockerfile: ./docker/Dockerfile.db-migration.dev
+    context: ./
+    rebuildStrategy: always
+  gql-dev:
+    image: ${GQL_IMAGE_DEV}
+    injectRestartHelper: true
+    tags:
+      - latest
+      - 0.0.1
+      - dev-${DEVSPACE_GIT_COMMIT}
+      - random-####
+    dockerfile: ./docker/Dockerfile.gql.dev
     context: ./
     rebuildStrategy: always

@@ -3,6 +3,7 @@ bases:
   - "./bases/pg"
   - "./bases/db"
   - "./bases/server"
+  - "./bases/gql"
 
 generatorOptions:
   disableNameSuffixHash: true

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gql
+  labels:
+    app: gql
+spec:
+  selector:
+    matchLabels:
+      app: gql
+  template:
+    metadata:
+      labels:
+        app: gql
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: gql
+          image: starter/gql-dev
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: dev-env-configmap
+          resources:
+            limits:
+              cpu: "400m"
+              memory: "800Mi"
