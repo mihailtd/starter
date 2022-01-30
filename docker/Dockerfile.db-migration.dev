@@ -13,5 +13,6 @@ RUN apk upgrade && apk --update add postgresql-client
 RUN yarn install --pure-lockfile --non-interactive
 
 COPY ./@app/db ./@app/db
+COPY ./schemas ./schemas
 
 CMD ["yarn", "db", "watch"]

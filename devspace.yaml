@@ -27,12 +27,6 @@ dev:
   # `dev.ports` specifies all ports that should be forwarded while `devspace dev` is running
   # Port-forwarding lets you access your application via localhost on your local machine
   ports:
-  - imageSelector: ${CLIENT_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
-    forward:
-    - port: 3000
-  - imageSelector: ${SERVER_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
-    forward:
-    - port: 8000
   - labelSelector:
       name: starter-db
     forward:
@@ -42,8 +36,8 @@ dev:
   # Since we configured port-forwarding, we can use a localhost address here to access our application
   open:
   - url: http://localhost:8090
-  - url: http://localhost:3000
-  - url: http://localhost:8000/graphiql
+  - url: http://client.local.starter.com
+  - url: http://server.local.starter.com/graphiql
 
   # `dev.sync` configures a file sync between our Pods in k8s and your local project files
   sync:
