@@ -36,7 +36,7 @@ Project structure:
 
 2. Developer Workflow
 
-- The database is migrated in watch more, every time a new migration file is edited, and the database is updated with the new migration.
+- The database is migrated in watch mode, every time a new migration file is edited, and the database is updated with the new migration.
 - The GraphQL server is watching the database for changes and automatically updates the GraphQL schema.
 - TypeScript Types and GraphQL Helpers are auto-generated using [graphql-code-generator](https://www.graphql-code-generator.com). This is also running in watch mode, every time a new type is added to the schema, the type is updated in the TypeScript types file giving you instant intellisense, code completion and type checking.
 - The database and graphql schema files are stored in `schemas` folder. Even though these are auto-generated, it is reccomended that this is commited to the repository as you can then easily compare and diff and track the changes.
@@ -61,13 +61,14 @@ Database migrations are handled by [Graphile Migrate](https://github.com/graphil
 
 ## Prerequisites
 
-Have a Kubernetes cluster running locally.
-Have DevSpace CLI installed.
+Have a Kubernetes cluster running locally - you can use Docker Desktop on windows or mac, or minikube on linux.
+Have a Ingress Controller installed - this project has [Nginx Ingress Controller](https://kubernetes.github.io/ingress-nginx/) configured. If you choose a different ingress controller, you will need to update the annotations on the ingress manifests.
+Have DevSpace CLI installed - Devspace is a CLI tool for managing k8s clusters, it was chosen as an alternative to Skaffold because it is easier to install, has alot of configuration possibilities, and is overall more user-friendly. See more infomration [here](https://devspace.sh/cli/docs/quickstart).
 
 ## Initial Setup
 
 - Install all the required manifests in your kubernetes cluster under `k8s/manual` - this contains all resources that should be installed manually. Use `kubectl apply -k ./k8s/manual/`
-- Switch to the namespace `starter` and instruct devspace to use it using `devspace use namespace starter`
+- Run `devspace use namespace starter` to switch to the namespace `starter` and instruct devspace to use it
 - Run `devspace dev` to start the application in development mode. This will:
   - Build all docker images
   - Start the database and database migrations in watch mode
@@ -77,6 +78,11 @@ Have DevSpace CLI installed.
   - Opens the urls in the browser
 - Run `devspace purge` to remove all the resources that were installed in kubernetes, except the ones installed manually.
 
+In order for the DNS to work, you will need add local DNS resolvers for the following domains:
+
+1. `server.starter.local` - this is the domain that the GraphQL server is deployed to
+2. `client.starter.local` - this is the domain that the client application is deployed to
+
 ## TO-DO
 
 1. [TODO] initialize SQL is not working
@@ -84,7 +90,10 @@ Have DevSpace CLI installed.
 3. [TODO] use TLS for the DB connection
 4. [TODO] define the IP in pg_hba.conf
 5. [TODO] define a better eslint config
+6. [TODO] configure HTTPS for local development
 
 # Known issues and quirks
 
 1. Database migrations can't easily be rolled back. This is the case for most SQL migrations as they involve migrating the data as well as the schema. The solution is to create a new migration file that contains the rollback statements.
+2. Sometimes changes to the pods apply only after deleting them and letting them re-create. This is probably because the containers have the same tags even after re-building them. If something does not seem to be synchronized even after deleting the pod, try running `devspace purge` and start again.
+3. If VS Code intellisense does not see the new generated types, try restarting VS Code, either a full restart, or better yet, open the comand pallet with `ctrl + shift + P` and type "reload window" and execute that to reload the current window faster than a full restart.
