@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-migration
+  labels:
+    app: db-migration
+spec:
+  selector:
+    matchLabels:
+      app: db-migration
+  template:
+    metadata:
+      labels:
+        app: db-migration
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: db-migration
+          image: registry.gitlab.com/farcasmihai91/starter/db-migration

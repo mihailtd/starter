@@ -3,7 +3,9 @@ bases:
   - "../../bases/pg"
   - "../../bases/db"
   - "../../bases/server"
-  - "../../bases/gql"
+
+patchesStrategicMerge:
+  - ""
 
 generatorOptions:
   disableNameSuffixHash: true
