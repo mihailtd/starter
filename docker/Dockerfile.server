@@ -1,0 +1,23 @@
+FROM node:17-buster-slim as build
+
+ENV NODE_ENV development
+WORKDIR /app
+
+COPY ./package.json ./yarn.lock ./tsconfig.json ./
+
+COPY ./@app/server/ ./@app/server
+
+RUN yarn install --pure-lockfile --non-interactive
+
+RUN yarn server build
+
+FROM node:17-buster-slim
+
+ENV NODE_ENV production
+WORKDIR /app
+
+COPY --from=build /app/@app/server/dist/ .
+
+RUN yarn install --pure-lockfile --production --non-interactive
+
+CMD ["yarn", "server", "start"]

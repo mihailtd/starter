@@ -1,0 +1,18 @@
+FROM node:17-alpine
+
+ENV NODE_ENV production
+
+WORKDIR /app
+
+COPY ./package.json ./yarn.lock ./tsconfig.json ./
+COPY ./@app/db/package.json ./@app/db/package.json
+
+RUN apk upgrade && apk add bash
+RUN apk upgrade && apk --update add postgresql-client
+
+RUN yarn install --pure-lockfile --non-interactive --production
+
+COPY ./@app/db ./@app/db
+COPY ./schemas ./schemas
+
+CMD ["yarn", "db", "migrate"]

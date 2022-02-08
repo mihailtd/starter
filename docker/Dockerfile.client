@@ -1,0 +1,25 @@
+FROM node:17-buster-slim as build
+
+ENV NODE_ENV local
+WORKDIR /app
+
+COPY ./package.json ./yarn.lock ./tsconfig.json ./
+
+COPY ./@app/client/ ./@app/client
+
+COPY ./@app/gql/ ./@app/gql
+
+RUN yarn install --pure-lockfile --non-interactive
+
+CMD ["yarn", "client", "build"]
+
+FROM node:17-buster-slim
+
+ENV NODE_ENV production
+WORKDIR /app
+
+COPY --from=build /app/@app/client/serve/ .
+
+RUN yarn install --pure-lockfile --production --non-interactive
+
+CMD ["npm", "start"]
