@@ -1,0 +1,6 @@
+resources:
+  - namespace.yaml
+  - argo-namespace.yaml
+
+bases:
+  - bases

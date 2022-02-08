@@ -1,0 +1,16 @@
+bases:
+  - "../../bases/client"
+  - "../../bases/pg"
+  - "../../bases/db"
+  - "../../bases/server"
+  - "../../bases/gql"
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: db-initialize-configmap
+    files:
+      - init.sql
+
+namespace: starter

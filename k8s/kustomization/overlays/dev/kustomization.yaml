@@ -1,0 +1,19 @@
+bases:
+  - "../../bases/client"
+  - "../../bases/pg"
+  - "../../bases/db"
+  - "../../bases/server"
+  - "../../bases/gql"
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: dev-env-configmap
+    envs:
+      - .env
+  - name: db-initialize-configmap
+    files:
+      - init.sql
+
+namespace: starter
