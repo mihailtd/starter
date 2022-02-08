@@ -1,7 +1,6 @@
 import express, { Express } from "express";
 import { Server } from "http";
 import { Middleware } from "postgraphile";
-
 import * as middleware from "./middleware";
 import { sanitizeEnv } from "./utils";
 
@@ -23,8 +22,8 @@ export async function makeApp({
 } = {}): Promise<Express> {
   sanitizeEnv();
 
-  const isTest = process.env.NODE_ENV === "test";
-  const isDev = process.env.NODE_ENV === "development";
+  // const isTest = process.env.NODE_ENV === "test";
+  // const isDev = process.env.NODE_ENV === "development";
 
   /*
    * Our Express server

@@ -2,7 +2,6 @@
 /* eslint-disable no-console */
 import chalk from "chalk";
 import { createServer } from "http";
-
 import { makeApp } from "./app";
 
 // @ts-ignore

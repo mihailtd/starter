@@ -7,7 +7,8 @@
     "build": "tsc -b",
     "start": "node dist/index.js",
     "dev": "tsc-watch --onSuccess 'node dist'",
-    "schema:export": "node node_modules/.bin/ts-node -O '{\"rootDir\":null}' scripts/schema-export.ts"
+    "schema:export": "node node_modules/.bin/ts-node -O '{\"rootDir\":null}' scripts/schema-export.ts",
+    "lint": "eslint . --ext .ts,.js,.vue --ignore-pattern 'node_modules' --ignore-pattern 'dist'"
   },
   "dependencies": {
     "@graphile-contrib/pg-simplify-inflector": "^6.1.0",

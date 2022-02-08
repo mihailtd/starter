@@ -12,7 +12,6 @@ import {
   PostGraphileOptions,
 } from "postgraphile";
 import { makePgSmartTagsFromFilePlugin } from "postgraphile/plugins";
-
 import { getHttpServer, getWebsocketMiddlewares } from "../app";
 import RemoveQueryQueryPlugin from "../plugins/RemoveQueryQueryPlugin";
 import handleErrors from "../utils/handleErrors";
@@ -22,7 +21,7 @@ export interface OurGraphQLContext {
   pgClient: PoolClient;
   sessionId: string | null;
   rootPgPool: Pool;
-  login(user: any): Promise<void>;
+  login(): Promise<void>;
   logout(): Promise<void>;
 }
 
@@ -36,6 +35,8 @@ type UUID = string;
 
 const isTest = process.env.NODE_ENV === "test";
 
+// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function uuidOrNull(input: string | number | null | undefined): UUID | null {
   if (!input) return null;
   const str = String(input);
@@ -65,7 +66,6 @@ interface IPostGraphileOptionsOptions {
 
 export function getPostGraphileOptions({
   websocketMiddlewares,
-  rootPgPool,
 }: IPostGraphileOptionsOptions) {
   const options: PostGraphileOptions<Request, Response> = {
     // This is for PostGraphile server plugins: https://www.graphile.org/postgraphile/plugins/

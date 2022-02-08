@@ -1,7 +1,6 @@
 import { urlencoded } from "body-parser";
 import { Express, Request, RequestHandler, Response } from "express";
 import { Pool } from "pg";
-
 import { getRootPgPool } from "./installDatabasePools";
 
 export default (app: Express) => {
@@ -34,8 +33,7 @@ export default (app: Express) => {
         "/cypressServerCommand denied because ENABLE_CYPRESS_COMMANDS is not set."
       );
       // Pretend like nothing happened
-      next();
-      return;
+      return next();
     }
 
     try {
@@ -147,10 +145,10 @@ async function runCommand(
       name = username,
       avatarUrl = null,
       password = "TestUserPassword",
-      next = "/",
-      orgs = [],
+      _next = "/",
+      _orgs = [],
     } = payload;
-    const user = await reallyCreateUser(rootPgPool, {
+    const _user = await reallyCreateUser(rootPgPool, {
       username,
       email,
       verified,
@@ -158,7 +156,7 @@ async function runCommand(
       avatarUrl,
       password,
     });
-    const otherUser = await reallyCreateUser(rootPgPool, {
+    const _otherUser = await reallyCreateUser(rootPgPool, {
       username: "testuser_other",
       email: "testuser_other@example.com",
       name: "testuser_other",
@@ -170,6 +168,7 @@ async function runCommand(
     try {
       await client.query("begin");
       try {
+        console.log("Creating user", _user.id);
       } finally {
         await client.query("commit");
       }

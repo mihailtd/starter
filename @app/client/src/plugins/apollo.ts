@@ -1,5 +1,5 @@
-import { InMemoryCache, NormalizedCacheObject } from "@apollo/client/cache";
-import { ApolloClient, ApolloLink, HttpLink } from "@apollo/client/core";
+import { InMemoryCache } from "@apollo/client/cache";
+import { ApolloClient, HttpLink } from "@apollo/client/core";
 
 const defaultSettings = {
   assumeImmutableResults: true,
@@ -8,7 +8,7 @@ const defaultSettings = {
 };
 
 const link = new HttpLink({
-  uri: import.meta.env.VITE_GRAPHQL_API_URL,
+  uri: import.meta.env.VITE_GRAPHQL_API_URL as string,
 });
 
 const cache = new InMemoryCache();

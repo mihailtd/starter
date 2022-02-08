@@ -1,8 +1,5 @@
 export function sanitizeEnv() {
-  const requiredEnvvars = [
-    "DATABASE_URL",
-    "NODE_ENV",
-  ];
+  const requiredEnvvars = ["DATABASE_URL", "NODE_ENV"];
   requiredEnvvars.forEach((envvar) => {
     if (!process.env[envvar]) {
       throw new Error(

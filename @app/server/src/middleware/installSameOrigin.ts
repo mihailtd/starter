@@ -1,8 +1,8 @@
-import { Express, RequestHandler } from "express";
-
+import { Express, Request, RequestHandler } from "express";
 import { getWebsocketMiddlewares } from "../app";
 
 declare module "express-serve-static-core" {
+  // eslint-disable-next-line no-unused-vars
   interface Request {
     /**
      * True if either the request 'Origin' header matches our ROOT_URL, or if
@@ -14,10 +14,11 @@ declare module "express-serve-static-core" {
 }
 
 export default (app: Express) => {
-  const middleware: RequestHandler = (req, res, next) => {
-    const baseUrl = process.env.ROOT_URL?.replace(/^https?:\/\//, "") || "don't allow";
-    console.log(baseUrl)
-    req.isSameOrigin = 
+  const middleware: RequestHandler = (req: Request, res, next) => {
+    const baseUrl =
+      process.env.ROOT_URL?.replace(/^https?:\/\//, "") || "don't allow";
+    console.log(baseUrl);
+    req.isSameOrigin =
       !req.headers.origin || req.headers.origin.indexOf(baseUrl) > -1;
     next();
   };

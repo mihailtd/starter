@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
+
 import { useUserQuery, UserQueryVariables } from "@starter/gql";
+
 import { useResult } from "@vue/apollo-composable";
 
 defineProps<{ msg: string }>();
@@ -12,16 +14,18 @@ const userQueryVariables: UserQueryVariables = {
   id: "1",
 };
 
-const { result, error, onError, loading } = useUserQuery(userQueryVariables, {
+const { result, error, loading } = useUserQuery(userQueryVariables, {
   fetchPolicy: "network-only",
 });
 
 const user = useResult(result, null, (data) => {
-  return data.user;
+  return data;
 });
 </script>
 
 <template>
+  <h1 v-if="!loading">{{ user }}</h1>
+  <h1 v-if="error">{{ error }}</h1>
   <h1 class="text-4xl font-bold text-orange-500">{{ msg }}</h1>
 
   <p>
