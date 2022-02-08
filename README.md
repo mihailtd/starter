@@ -25,6 +25,7 @@ Project structure:
 - `k8s` - this folder contains the k8s manifests
   - `k8s/manual` - contains the k8s manifests that should be manually applied
   - `k8s/kustomization` - contains the k8s manifests that should be applied automatically by DevSpace
+    - `k8s/kustomization/overlays` - contains different overlays for the k8s manifests for each environment
 
 ## Developer experience
 
@@ -67,7 +68,7 @@ Have DevSpace CLI installed - Devspace is a CLI tool for managing k8s clusters, 
 
 ## Initial Setup
 
-- Install all the required manifests in your kubernetes cluster under `k8s/manual` - this contains all resources that should be installed manually. Use `kubectl apply -k ./k8s/manual/`
+- Install all the required manifests in your kubernetes cluster under `k8s/manual` - this contains all resources that should be installed manually. Use `k apply -k ./k8s/manual/overlays/dev/` to install all manifests required for local development (check the `overlays` folder for different environments).
 - Run `devspace use namespace starter` to switch to the namespace `starter` and instruct devspace to use it
 - Run `devspace dev` to start the application in development mode. This will:
   - Build all docker images
@@ -80,8 +81,26 @@ Have DevSpace CLI installed - Devspace is a CLI tool for managing k8s clusters, 
 
 In order for the DNS to work, you will need add local DNS resolvers for the following domains:
 
-1. `server.starter.local` - this is the domain that the GraphQL server is deployed to
-2. `client.starter.local` - this is the domain that the client application is deployed to
+1. `server.local.starter.com` - this is the domain that the GraphQL server is deployed to
+2. `client.local.starter.com` - this is the domain that the client application is deployed to
+
+## Continuous Integration and Continuous Deployment
+
+Workflow:
+The code is started on a feature branch, a merge request is submitted. Each feature must come with it's own set of automated tests. As soon as it is merged into `main`, the automated tests are run and the code is deployed to the staging environment. At any point in time the code can be deployed to the production environment by merging the `main` branch in `production`.
+ArgoCD keeps both the staging and production environments in sync based on the respective git branch.
+
+Decisions:
+
+1. Work on a feature starts on a feature branch, as soon as it is merged in `main` it is deployed to the staging environment.
+1. Development images are created by DevSpace. They are tagged with the current commit hash, and are not uploaded to the registry.
+1. The `main` branch is what is currently released in staging, this is done automatically by ArgoCD
+1. As soon as a feature branch is merged in `main`, CI jobs are triggered for:
+1. creating images and uploading them to the registry
+1. updating the kustomize overlay files with the new images
+1. run the automated tests in staging
+1. Production deployments are triggered by merging the `main` branch in `production` branch.
+1. in order to achieve the real contnuous deployment, this last step needs to be eliminated. This can only be done when there is enough confidence in the automated tests so that the deployment can be done without manual intervention, at which point there is no need for separate `main` and `production` branches.
 
 ## TO-DO
 
@@ -91,6 +110,8 @@ In order for the DNS to work, you will need add local DNS resolvers for the foll
 4. [TODO] define the IP in pg_hba.conf
 5. [TODO] define a better eslint config
 6. [TODO] configure HTTPS for local development
+7. [TODO] see if you can tag images separately, based on something other than commit hash, in order to update the images only when changes to the specific sub-directories are made, not on every commit.
+8. [TODO] currently the staging / production docker images are built locally using DevSpace CLI, this should run in a CI pipeline.
 
 # Known issues and quirks
 

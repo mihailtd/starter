@@ -2,23 +2,23 @@ version: v1beta11
 
 # `vars` specifies variables which may be used as ${VAR_NAME} in devspace.yaml
 vars:
-- name: DB_MIGRATION_IMAGE_DEV
-  value: starter/db-migration-dev
-- name: CLIENT_IMAGE_DEV
-  value: starter/client-dev
-- name: SERVER_IMAGE_DEV
-  value: starter/server-dev
-- name: GQL_IMAGE_DEV
-  value: starter/gql-dev
+  - name: DB_MIGRATION_IMAGE
+    value: starter/db-migration
+  - name: CLIENT_IMAGE
+    value: starter/client
+  - name: SERVER_IMAGE
+    value: starter/server
+  - name: GQL_IMAGE
+    value: starter/gql
 
 # `deployments` tells DevSpace how to deploy this project
 deployments:
-- name: starter
-  # This deployment uses `kubectl` but you can also define `helm` deployments
-  kubectl:
-    manifests:
-    - ./k8s/kustomization
-    kustomize: true
+  - name: starter
+    # This deployment uses `kubectl` but you can also define `helm` deployments
+    kubectl:
+      manifests:
+        - ./k8s/kustomization/overlays/dev/kustomization.yaml
+      kustomize: true
 
 # `dev` only applies when you run `devspace dev`
 dev:
@@ -27,21 +27,21 @@ dev:
   # `dev.ports` specifies all ports that should be forwarded while `devspace dev` is running
   # Port-forwarding lets you access your application via localhost on your local machine
   ports:
-  - labelSelector:
-      name: starter-db
-    forward:
-      - port: 5432
+    - labelSelector:
+        name: starter-db
+      forward:
+        - port: 5432
 
   # `dev.open` tells DevSpace to open certain URLs as soon as they return HTTP status 200
   # Since we configured port-forwarding, we can use a localhost address here to access our application
   open:
-  - url: http://localhost:8090
-  - url: http://client.local.starter.com
-  - url: http://server.local.starter.com/graphiql
+    - url: http://localhost:8090
+    - url: http://client.local.starter.com
+    - url: http://server.local.starter.com/graphiql
 
   # `dev.sync` configures a file sync between our Pods in k8s and your local project files
   sync:
-    - imageSelector: ${GQL_IMAGE_DEV} # Select the Pod that runs our `${IMAGE}`
+    - imageSelector: ${GQL_IMAGE}-dev # Select the Pod that runs our `${IMAGE}`
       localSubPath: ./@app/gql
       containerPath: /app/@app/gql
       excludePaths:
@@ -58,7 +58,7 @@ dev:
         - "**/node_modules"
         - "**/dist"
         - "**/__tests__"
-    - imageSelector: ${GQL_IMAGE_DEV}
+    - imageSelector: ${GQL_IMAGE}-dev
       localSubPath: ./schemas
       containerPath: /app/schemas
       excludePaths:
@@ -75,7 +75,7 @@ dev:
         - "**/node_modules"
         - "**/dist"
         - "**/__tests__"
-    - imageSelector: ${GQL_IMAGE_DEV}
+    - imageSelector: ${GQL_IMAGE}-dev
       localSubPath: ./@app/client
       containerPath: /app/@app/client
       excludePaths:
@@ -92,7 +92,7 @@ dev:
         - "**/node_modules"
         - "**/dist"
         - "**/__tests__"
-    - imageSelector: ${SERVER_IMAGE_DEV}
+    - imageSelector: ${SERVER_IMAGE}-dev
       localSubPath: ./@app/server
       containerPath: /app/@app/server
       excludePaths:
@@ -109,7 +109,7 @@ dev:
         - "**/node_modules"
         - "**/dist"
         - "**/__tests__"
-    - imageSelector: ${SERVER_IMAGE_DEV}
+    - imageSelector: ${SERVER_IMAGE}-dev
       localSubPath: ./schemas
       containerPath: /app/schemas
       excludePaths:
@@ -126,7 +126,7 @@ dev:
         - "**/node_modules"
         - "**/dist"
         - "**/__tests__"
-    - imageSelector: ${CLIENT_IMAGE_DEV}
+    - imageSelector: ${CLIENT_IMAGE}-dev
       localSubPath: ./@app/client
       containerPath: /app/@app/client
       excludePaths:
@@ -144,7 +144,7 @@ dev:
         - "**/node_modules"
         - "**/dist"
         - "**/__tests__"
-    - imageSelector: ${CLIENT_IMAGE_DEV}
+    - imageSelector: ${CLIENT_IMAGE}-dev
       localSubPath: ./@app/gql
       containerPath: /app/@app/gql
       excludePaths:
@@ -160,7 +160,7 @@ dev:
         - "**/.next"
         - "**/node_modules"
         - "**/__tests__"
-    - imageSelector: ${DB_MIGRATION_IMAGE_DEV}
+    - imageSelector: ${DB_MIGRATION_IMAGE}-dev
       localSubPath: ./@app/db
       containerPath: /app/@app/db
       excludePaths:
@@ -177,7 +177,7 @@ dev:
         - "**/node_modules"
         - "**/dist"
         - "**/__tests__"
-    - imageSelector: ${DB_MIGRATION_IMAGE_DEV}
+    - imageSelector: ${DB_MIGRATION_IMAGE}-dev
       localSubPath: ./schemas
       containerPath: /app/schemas
       excludePaths:
@@ -227,64 +227,79 @@ dev:
   #     path: spec.containers[0].securityContext
 
 commands:
-- name: commit-db-migration
-  command: "devspace enter yarn db commit --image-selector starter/db-migration-dev:latest"
+  - name: commit-db-migration
+    command: "devspace enter yarn db commit --image-selector starter/db-migration-dev:latest"
+
+images:
+  server-dev:
+    image: ${SERVER_IMAGE}-dev
+    injectRestartHelper: true
+    tags:
+      - ${DEVSPACE_GIT_COMMIT}
+    dockerfile: ./docker/Dockerfile.server.dev
+    context: ./
+    rebuildStrategy: always
+  client-dev:
+    image: ${CLIENT_IMAGE}-dev
+    injectRestartHelper: true
+    tags:
+      - ${DEVSPACE_GIT_COMMIT}
+    dockerfile: ./docker/Dockerfile.client.dev
+    context: ./
+    rebuildStrategy: always
+  db-migration-dev:
+    image: ${DB_MIGRATION_IMAGE}-dev
+    injectRestartHelper: true
+    tags:
+      - ${DEVSPACE_GIT_COMMIT}
+    dockerfile: ./docker/Dockerfile.db-migration.dev
+    context: ./
+    rebuildStrategy: always
+  gql-dev:
+    image: ${GQL_IMAGE}-dev
+    injectRestartHelper: true
+    tags:
+      - ${DEVSPACE_GIT_COMMIT}
+    dockerfile: ./docker/Dockerfile.gql.dev
+    context: ./
+    rebuildStrategy: always
 
 # `profiles` lets you modify the config above for different environments (e.g. dev vs production)
 profiles:
   # This profile is called `production` and you can use it for example using: devspace deploy -p production
   # We generally recommend to use the base config without any profiles as optimized for development (e.g. image build+push is disabled)
-# - name: production
-# # This profile adds our image to the config so that DevSpace will build, tag and push our image before the deployment
-#   merge:
-#     images:
-#       app:
-#         image: ${IMAGE} # Use the value of our `${IMAGE}` variable here (see vars above)
-#         dockerfile: ./dockerfiles/Dockerfile.client
-#         context: ./@app/client
-
-images:
-  server-dev:
-    image: ${SERVER_IMAGE_DEV}
-    injectRestartHelper: true
-    tags:
-      - latest
-      - 0.0.1
-      - dev-${DEVSPACE_GIT_COMMIT}
-      - random-####
-    dockerfile: ./docker/Dockerfile.server.dev
-    context: ./
-    rebuildStrategy: always
-  client-dev:
-    image: ${CLIENT_IMAGE_DEV}
-    injectRestartHelper: true
-    tags:
-      - latest
-      - 0.0.1
-      - dev-${DEVSPACE_GIT_COMMIT}
-      - random-####
-    dockerfile: ./docker/Dockerfile.client.dev
-    context: ./
-    rebuildStrategy: always
-  db-migration-dev:
-    image: ${DB_MIGRATION_IMAGE_DEV}
-    injectRestartHelper: true
-    tags:
-      - latest
-      - 0.0.1
-      - dev-${DEVSPACE_GIT_COMMIT}
-      - random-####
-    dockerfile: ./docker/Dockerfile.db-migration.dev
-    context: ./
-    rebuildStrategy: always
-  gql-dev:
-    image: ${GQL_IMAGE_DEV}
-    injectRestartHelper: true
-    tags:
-      - latest
-      - 0.0.1
-      - dev-${DEVSPACE_GIT_COMMIT}
-      - random-####
-    dockerfile: ./docker/Dockerfile.gql.dev
-    context: ./
-    rebuildStrategy: always
+  - name: staging
+    # This profile adds our image to the config so that DevSpace will build, tag and push our image before the deployment
+    replace:
+      deployments:
+      dev:
+      dependencies:
+      hooks:
+      images:
+        server:
+          image: registry.gitlab.com/farcasmihai91/${SERVER_IMAGE}
+          dockerfile: ./docker/Dockerfile.server
+          tags:
+            - ${DEVSPACE_GIT_COMMIT}
+          context: ./
+          rebuildStrategy: ignoreContextChanges
+          build:
+            kaniko:
+        db-migration:
+          image: registry.gitlab.com/farcasmihai91/${DB_MIGRATION_IMAGE}
+          dockerfile: ./docker/Dockerfile.db-migration
+          tags:
+            - ${DEVSPACE_GIT_COMMIT}
+          context: ./
+          rebuildStrategy: ignoreContextChanges
+          build:
+            kaniko:
+        client:
+          image: registry.gitlab.com/farcasmihai91/${CLIENT_IMAGE}
+          dockerfile: ./docker/Dockerfile.client
+          tags:
+            - ${DEVSPACE_GIT_COMMIT}
+          context: ./
+          rebuildStrategy: ignoreContextChanges
+          build:
+            kaniko:
