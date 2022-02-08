@@ -1,15 +1,49 @@
-const { readFileSync } = require("fs");
-const schemaString = readFileSync(`${__dirname}/schemas/schema.graphql`, "utf8");
+const { readFileSync } = require("fs")
+const schemaString = readFileSync(`${__dirname}/schemas/schema.graphql`, "utf8")
 
 module.exports = {
-  parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint", "graphql"],
+  parser: "vue-eslint-parser",
+  parserOptions: {
+    parser: "@typescript-eslint/parser",
+    sourceType: "module",
+  },
+  extends: [
+    "eslint:recommended",
+    "plugin:vue/vue3-recommended",
+    "plugin:import/errors",
+    "plugin:import/typescript",
+    "prettier",
+  ],
+  plugins: [
+    "vue",
+    "jest",
+    "@typescript-eslint",
+    "graphql",
+    "simple-import-sort",
+    "import",
+    "prettier",
+  ],
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
+  },
   rules: {
+    "no-unused-vars": "off",
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      },
+    ],
     "graphql/template-strings": [
       "error",
       {
         env: "literal",
         schemaString,
+        tagName: "gql",
         validators: [
           "ExecutableDefinitionsRule",
           "FieldsOnCorrectTypeRule",
@@ -44,7 +78,9 @@ module.exports = {
     "graphql/named-operations": [
       "error",
       {
+        env: "literal",
         schemaString,
+        tagName: "gql",
       },
     ],
     "graphql/required-fields": [
@@ -52,8 +88,9 @@ module.exports = {
       {
         env: "literal",
         schemaString,
+        tagName: "gql",
         requiredFields: ["nodeId", "id"],
       },
     ],
-  }
+  },
 }

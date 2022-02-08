@@ -7,20 +7,22 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint . --ext .ts,.js,.vue --ignore-pattern 'node_modules' --ignore-pattern 'dist'"
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
     "@starter/gql": "0.0.0",
     "@vue/apollo-composable": "^4.0.0-alpha.16",
-    "vue": "^3.2.24"
+    "vue": "^3.2.30"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.1.0",
     "autoprefixer": "^10.4.2",
-    "postcss": "^8.4.5",
-    "tailwindcss": "^3.0.18",
+    "postcss": "^8.4.6",
+    "prettier-plugin-tailwindcss": "^0.1.6",
+    "tailwindcss": "^3.0.19",
     "vite": "^2.7.13",
-    "vue-tsc": "^0.31.1"
+    "vue-tsc": "^0.31.2"
   }
 }
