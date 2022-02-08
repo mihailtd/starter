@@ -16,4 +16,4 @@ spec:
       restartPolicy: Always
       containers:
         - name: db-migration
-          image: registry.gitlab.com/farcasmihai91/starter/db-migration
+          image: registry.gitlab.com/farcasmihai91/starter/db-migration:91dc79d8
