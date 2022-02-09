@@ -15,3 +15,5 @@ dist-ssr
 
 # Ignore DevSpace cache and log folder
 .devspace/
+.dockerconfig.json
+secret-*.yaml
