@@ -1,11 +1,8 @@
 bases:
   #   - "../../bases/client"
   - "../../bases/pg"
-#   - "../../bases/db"
+  - "./bases/db"
 #   - "../../bases/server"
-
-# patchesStrategicMerge:
-#   - "db-migration.yaml"
 
 generatorOptions:
   disableNameSuffixHash: true

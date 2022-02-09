@@ -1,0 +1,4 @@
+namespace: starter
+
+resources:
+  - db-migration.yaml

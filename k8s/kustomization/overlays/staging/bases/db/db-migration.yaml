@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migration
+  labels:
+    app: db-migration
+spec:
+  selector:
+    matchLabels:
+      app: db-migration
+  template:
+    metadata:
+      labels:
+        app: db-migration
+    spec:
+      containers:
+        - name: db-migration
+          image: registry.gitlab.com/farcasmihai91/starter/db-migration:91dc79d8
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "300m"
+              memory: "300Mi"
+          envFrom:
+            - configMapRef:
+                name: dev-env-configmap
+          env:
+            - name: ROOT_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: starter-db-pguser-postgres
+                  key: uri
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: starter-db-pguser-starter-owner
+                  key: uri
+            - name: SHADOW_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: starter-db-pguser-starter-shadow-owner
+                  key: uri
+            - name: SERVER_ROLE
+              valueFrom:
+                secretKeyRef:
+                  name: starter-db-pguser-starter-server
+                  key: user
+            - name: SERVER_AUTHENTICATOR_ROLE
+              valueFrom:
+                secretKeyRef:
+                  name: starter-db-pguser-starter-server-authenticator
+                  key: user
+      restartPolicy: Never
+  backoffLimit: 4
+  ttlSecondsAfterFinished: 600
