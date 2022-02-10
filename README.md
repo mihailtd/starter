@@ -86,6 +86,8 @@ In order for the DNS to work, you will need add local DNS resolvers for the foll
 
 ## Continuous Integration and Continuous Deployment
 
+To build all images and push them to the registry, run the following command: `devspace build -b -p staging` - this will force build all images and push them to the registry.
+
 Workflow:
 The code is started on a feature branch, a merge request is submitted. Each feature must come with it's own set of automated tests. As soon as it is merged into `main`, the automated tests are run and the code is deployed to the staging environment. At any point in time the code can be deployed to the production environment by merging the `main` branch in `production`.
 ArgoCD keeps both the staging and production environments in sync based on the respective git branch.

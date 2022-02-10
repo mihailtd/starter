@@ -239,6 +239,9 @@ images:
     dockerfile: ./docker/Dockerfile.server.dev
     context: ./
     rebuildStrategy: always
+    build:
+      docker:
+        skipPush: true
   client-dev:
     image: ${CLIENT_IMAGE}-dev
     injectRestartHelper: true
@@ -247,6 +250,9 @@ images:
     dockerfile: ./docker/Dockerfile.client.dev
     context: ./
     rebuildStrategy: always
+    build:
+      docker:
+        skipPush: true
   db-migration-dev:
     image: ${DB_MIGRATION_IMAGE}-dev
     injectRestartHelper: true
@@ -255,6 +261,9 @@ images:
     dockerfile: ./docker/Dockerfile.db-migration.dev
     context: ./
     rebuildStrategy: always
+    build:
+      docker:
+        skipPush: true
   gql-dev:
     image: ${GQL_IMAGE}-dev
     injectRestartHelper: true
@@ -263,6 +272,9 @@ images:
     dockerfile: ./docker/Dockerfile.gql.dev
     context: ./
     rebuildStrategy: always
+    build:
+      docker:
+        skipPush: true
 
 # `profiles` lets you modify the config above for different environments (e.g. dev vs production)
 profiles:
@@ -282,7 +294,7 @@ profiles:
           tags:
             - ${DEVSPACE_GIT_COMMIT}
           context: ./
-          rebuildStrategy: ignoreContextChanges
+          rebuildStrategy: always
           build:
             kaniko:
         db-migration:
@@ -291,7 +303,7 @@ profiles:
           tags:
             - ${DEVSPACE_GIT_COMMIT}
           context: ./
-          rebuildStrategy: ignoreContextChanges
+          rebuildStrategy: always
           build:
             kaniko:
         client:
@@ -300,6 +312,6 @@ profiles:
           tags:
             - ${DEVSPACE_GIT_COMMIT}
           context: ./
-          rebuildStrategy: ignoreContextChanges
+          rebuildStrategy: always
           build:
             kaniko:
