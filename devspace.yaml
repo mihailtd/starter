@@ -314,6 +314,11 @@ profiles:
           context: ./
           rebuildStrategy: always
           build:
-            kaniko:
-              args:
-                - VITE_GRAPHQL_API_URL=https://server.staging.starter.com/graphql
+            docker:
+              options:
+                buildArgs:
+                  VITE_GRAPHQL_API_URL: https://server.staging.starter.com/graphql
+            # kaniko:
+            #   options:
+            #     buildArgs:
+            #       VITE_GRAPHQL_API_URL: https://server.staging.starter.com/graphql
