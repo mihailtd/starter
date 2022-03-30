@@ -3,4 +3,3 @@ namespace: starter
 resources:
   - server.yaml
   - server-service.yaml
-  - server-ingress.yaml

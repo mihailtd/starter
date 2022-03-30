@@ -1,5 +1,6 @@
 resources:
   - namespace.yaml
+  - env-configmap.yaml
   - argo-namespace.yaml
   - secret-registry-credentials.yaml
   - default.service-account.yaml

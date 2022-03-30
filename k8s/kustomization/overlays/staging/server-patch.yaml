@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+spec:
+  selector:
+    matchLabels:
+      app: server
+  template:
+    spec:
+      containers:
+        - name: server
+          envFrom:
+            - configMapRef:
+                name: env-configmap

@@ -1,8 +1,10 @@
 bases:
-  #   - "../../bases/client"
-  - "../../bases/pg"
-  - "./bases/db"
-#   - "../../bases/server"
+  - ../../bases/pg
+  - ../../bases/client
+  - ../../bases/server
+  - ./bases/db
+  - ./bases/client
+  - ./bases/server
 
 generatorOptions:
   disableNameSuffixHash: true
@@ -11,5 +13,20 @@ configMapGenerator:
   - name: db-initialize-configmap
     files:
       - init.sql
+
+patchesStrategicMerge:
+  - server-patch.yaml
+  - client-patch.yaml
+
+images:
+  - name: starter/db-migration-dev
+    newName: registry.gitlab.com/farcasmihai91/starter/db-migration
+    newTag: 6c3e5d5a
+  - name: starter/client-dev
+    newName: registry.gitlab.com/farcasmihai91/starter/client
+    newTag: 6c3e5d5a
+  - name: starter/server-dev
+    newName: registry.gitlab.com/farcasmihai91/starter/server
+    newTag: 6c3e5d5a
 
 namespace: starter

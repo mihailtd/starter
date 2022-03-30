@@ -1,9 +1,11 @@
 bases:
-  - "../../bases/client"
-  - "../../bases/pg"
-  - "../../bases/db"
-  - "../../bases/server"
-  - "../../bases/gql"
+  - ../../bases/client
+  - ../../bases/pg
+  - ../../bases/db
+  - ../../bases/server
+  - ../../bases/gql
+  - bases/client
+  - bases/server
 
 generatorOptions:
   disableNameSuffixHash: true

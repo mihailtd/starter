@@ -1,0 +1,4 @@
+namespace: starter
+
+resources:
+  - client-ingress.yaml
