@@ -29,7 +29,7 @@
   "devDependencies": {
     "@types/csurf": "^1.11.2",
     "@types/helmet": "^4.0.0",
-    "@types/lodash": "^4.14.180",
+    "@types/lodash": "^4.14.181",
     "@types/morgan": "^1.9.3",
     "@types/pg": "^8.6.5",
     "ts-node": "^10.7.0",

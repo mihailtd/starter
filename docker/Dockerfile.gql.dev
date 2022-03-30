@@ -1,7 +1,6 @@
 FROM node:17-alpine
 
 ENV NODE_ENV local
-
 WORKDIR /app
 
 COPY ./package.json ./yarn.lock ./tsconfig.json ./
