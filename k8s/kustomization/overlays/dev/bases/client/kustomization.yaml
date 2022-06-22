@@ -2,3 +2,4 @@ namespace: starter
 
 resources:
   - client-ingress.yaml
+  - client-ingress-web.yaml

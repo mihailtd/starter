@@ -1,11 +1,11 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: client-ingress
+  name: client-ingress-web
   namespace: starter
 spec:
   entryPoints:
-    - websecure
+    - web
   routes:
     - kind: Rule
       match: Host(`client.local.starter.com`)
@@ -13,7 +13,5 @@ spec:
       services:
         - name: client-service
           port: 80
-  tls:
-    certResolver: default
-    options:
-      name: client-service
+      middlewares:
+        - name: https-redirect
