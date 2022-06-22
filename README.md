@@ -63,7 +63,7 @@ Database migrations are handled by [Graphile Migrate](https://github.com/graphil
 ## Prerequisites
 
 Have a Kubernetes cluster running locally - you can use Docker Desktop on windows or mac, or minikube on linux.
-Have a Ingress Controller installed - this project has [Nginx Ingress Controller](https://kubernetes.github.io/ingress-nginx/) configured. If you choose a different ingress controller, you will need to update the annotations on the ingress manifests.
+Have a Ingress Controller installed - this project has [Traefik Ingress Controller](https://doc.traefik.io/traefik/getting-started/install-traefik/) configured. If you choose a different ingress controller, you will need to update the annotations on the ingress manifests. Make sure you also have HTTPS configured.
 Have DevSpace CLI installed - Devspace is a CLI tool for managing k8s clusters, it was chosen as an alternative to Skaffold because it is easier to install, has alot of configuration possibilities, and is overall more user-friendly. See more infomration [here](https://devspace.sh/cli/docs/quickstart).
 
 ## Initial Setup

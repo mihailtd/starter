@@ -11,18 +11,18 @@
     "lint": "eslint . --ext .ts,.js,.vue --ignore-pattern 'node_modules' --ignore-pattern 'dist'"
   },
   "dependencies": {
-    "@apollo/client": "^3.5.10",
+    "@apollo/client": "^3.6.8",
     "@starter/gql": "0.0.0",
-    "@vue/apollo-composable": "^4.0.0-alpha.16",
-    "vue": "^3.2.31"
+    "@vue/apollo-composable": "^4.0.0-alpha.17",
+    "vue": "^3.2.37"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^2.3.0",
-    "autoprefixer": "^10.4.4",
-    "postcss": "^8.4.12",
-    "prettier-plugin-tailwindcss": "^0.1.8",
-    "tailwindcss": "^3.0.23",
-    "vite": "^2.9.0",
-    "vue-tsc": "^0.33.9"
+    "@vitejs/plugin-vue": "^2.3.3",
+    "autoprefixer": "^10.4.7",
+    "postcss": "^8.4.14",
+    "prettier-plugin-tailwindcss": "^0.1.11",
+    "tailwindcss": "^3.1.4",
+    "vite": "^2.9.12",
+    "vue-tsc": "^0.38.1"
   }
 }

@@ -36,8 +36,8 @@ dev:
   # Since we configured port-forwarding, we can use a localhost address here to access our application
   open:
     - url: http://localhost:8090
-    - url: http://client.local.starter.com
-    - url: http://server.local.starter.com/graphiql
+    - url: https://client.local.starter.com
+    - url: https://server.local.starter.com/graphiql
 
   # `dev.sync` configures a file sync between our Pods in k8s and your local project files
   sync:
@@ -132,6 +132,7 @@ dev:
       excludePaths:
         - .git/
         - "**/node_modules"
+        - "**/serve"
       uploadExcludePaths:
         - .docker
         - .env
@@ -149,6 +150,7 @@ dev:
       containerPath: /app/@app/gql
       excludePaths:
         - .git/
+        - "**/node_modules"
       uploadExcludePaths:
         - .docker
         - .env
