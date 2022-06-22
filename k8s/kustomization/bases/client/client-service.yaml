@@ -8,5 +8,5 @@ spec:
     app: client
   ports:
     - name: client
-      port: 3000
+      port: 80
       targetPort: 3000
