@@ -8,7 +8,7 @@ const defaultSettings = {
 };
 
 const link = new HttpLink({
-  uri: import.meta.env.VITE_GRAPHQL_API_URL as string,
+  uri: "/graphql",
 });
 
 const cache = new InMemoryCache();
