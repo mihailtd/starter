@@ -9,4 +9,3 @@ data:
   NODE_ENV: production
   ROOT_URL: https://staging.starter.com
   SERVER_PORT: "8000"
-  VITE_GRAPHQL_API_URL: https://server.staging.starter.com/graphql
