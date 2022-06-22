@@ -317,6 +317,3 @@ profiles:
           rebuildStrategy: always
           build:
             kaniko:
-              options:
-                buildArgs:
-                  VITE_GRAPHQL_API_URL: https://server.staging.starter.com/graphql
