@@ -4,11 +4,11 @@ import App from "./App.vue";
 import "./index.pcss";
 import { apolloClient } from "./plugins/apollo";
 
-apolloClient;
-createApp({
+const app = createApp({
   setup() {
     provide(DefaultApolloClient, apolloClient);
   },
-
   render: () => h(App),
-}).mount("#app");
+});
+
+app.mount("#app");

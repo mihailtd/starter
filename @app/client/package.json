@@ -13,7 +13,9 @@
   "dependencies": {
     "@apollo/client": "^3.6.8",
     "@starter/gql": "0.0.0",
-    "@vue/apollo-composable": "^4.0.0-alpha.17",
+    "@vue/apollo-composable": "^4.0.0-alpha.18",
+    "jwt-decode": "^3.1.2",
+    "keycloak-js": "^18.0.1",
     "vue": "^3.2.37"
   },
   "devDependencies": {

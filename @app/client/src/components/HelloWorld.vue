@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { ref, defineProps } from "vue";
-
-import { useUserQuery, UserQueryVariables } from "@starter/gql";
-
-import { useResult } from "@vue/apollo-composable";
+import { UserQueryVariables, useUserQuery } from "@starter/gql";
+import { computed, defineProps, onMounted, ref, watch } from "vue";
+import { initializeKeycloak, useKeycloak } from "../plugins/keycloak";
 
 defineProps<{ msg: string }>();
+
+const { keycloak, isAuthenticated, authError } = useKeycloak();
+
+onMounted(async () => {
+  await initializeKeycloak();
+  if (!isAuthenticated.value) {
+    await keycloak.login();
+  }
+});
 
 const count = ref(0);
 
@@ -18,15 +25,31 @@ const { result, error, loading } = useUserQuery(userQueryVariables, {
   fetchPolicy: "network-only",
 });
 
-const user = useResult(result, null, (data) => {
-  return data;
+watch(result, () => {
+  console.log(result);
+});
+watch(error, () => {
+  console.log(error);
+});
+
+const user = computed(() => {
+  return result?.data?.user;
 });
 </script>
 
 <template>
+  <h1 class="text-4xl font-bold text-gray-500">{{ isAuthenticated }}</h1>
+  <h1 class="text-4xl font-bold text-gray-500">
+    {{ keycloak.tokenParsed?.family_name }}
+  </h1>
+  <h1 class="text-4xl font-bold text-gray-500">
+    {{ keycloak.tokenParsed?.given_name }}
+  </h1>
+  <h1 class="text-4xl font-bold text-gray-500">{{ authError }}</h1>
+
   <h1 v-if="!loading">{{ user }}</h1>
   <h1 v-if="error">{{ error }}</h1>
-  <h1 class="text-4xl font-bold text-orange-500">{{ msg }}</h1>
+  <h1 class="text-4xl font-bold text-gray-500">{{ msg }}</h1>
 
   <p>
     Recommended IDE setup:
