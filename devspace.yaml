@@ -6,6 +6,8 @@ vars:
     value: starter/db-migration
   - name: CLIENT_IMAGE
     value: starter/client
+  - name: KEYCLOAK_IMAGE
+    value: starter/keycloak
   - name: SERVER_IMAGE
     value: starter/server
   - name: GQL_IMAGE
@@ -233,6 +235,17 @@ commands:
     command: "devspace enter yarn db commit --image-selector starter/db-migration-dev:latest"
 
 images:
+  keycloak:
+    image: ${KEYCLOAK_IMAGE}
+    injectRestartHelper: false
+    tags:
+      - ${DEVSPACE_GIT_COMMIT}
+    dockerfile: ./docker/Dockerfile.keycloak
+    context: ./
+    rebuildStrategy: always
+    build:
+      docker:
+        skipPush: true
   server-dev:
     image: ${SERVER_IMAGE}-dev
     injectRestartHelper: true
