@@ -1,0 +1,8 @@
+# TODO: change namespace
+namespace: starter
+
+resources:
+  - keycloak.yaml
+  - keycloak-service.yaml
+  - keycloak-ingress.yaml
+  - keycloak-ingress-web.yaml

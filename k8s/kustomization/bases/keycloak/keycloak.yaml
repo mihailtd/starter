@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  labels:
+    app: keycloak
+spec:
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: keycloak
+          image: starter/keycloak
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "800Mi"
+          env:
+            - name: KEYCLOAK_ADMIN_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-env-configmap
+                  key: KEYCLOAK_ADMIN_USER
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-env-configmap
+                  key: KEYCLOAK_ADMIN_PASSWORD
+            - name: KEYCLOAK_DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: keycloakdb-pguser-keycloakdb
+                  key: host
+            - name: KEYCLOAK_DATABASE_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: keycloakdb-pguser-keycloakdb
+                  key: port
+            - name: KEYCLOAK_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: keycloakdb-pguser-keycloakdb
+                  key: dbname
+            - name: KEYCLOAK_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: keycloakdb-pguser-keycloakdb
+                  key: user
+            - name: KEYCLOAK_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloakdb-pguser-keycloakdb
+                  key: password

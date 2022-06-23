@@ -1,0 +1,19 @@
+FROM node:17-buster-slim as build
+
+ENV NODE_ENV local
+
+WORKDIR /app
+
+COPY ./package.json ./yarn.lock ./tsconfig.json ./
+
+COPY ./@app/auth-client/ ./@app/auth-client
+
+RUN yarn install --pure-lockfile --non-interactive
+
+CMD ["yarn", "auth-client", "build"]
+
+FROM bitnami/keycloak:latest
+
+COPY --from=build /app/@app/auth-client/theme/keywind /opt/bitnami/keycloak/themes/keywind
+
+CMD [ "/opt/bitnami/scripts/keycloak/run.sh" ]

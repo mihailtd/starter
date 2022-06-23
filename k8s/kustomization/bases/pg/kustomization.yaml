@@ -2,4 +2,5 @@
 namespace: starter
 
 resources:
-- ha-postgres.yaml
+  - ha-postgres.yaml
+  - keycloak-db.yaml

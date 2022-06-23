@@ -1,0 +1,19 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: keycloak-ingress
+  namespace: starter
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`keycloak.local.starter.com`)
+      priority: 10
+      services:
+        - name: keycloak-service
+          port: 80
+  tls:
+    certResolver: default
+    options:
+      name: keycloak-service

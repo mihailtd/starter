@@ -4,6 +4,7 @@ bases:
   - ../../bases/db
   - ../../bases/server
   - ../../bases/gql
+  - ../../bases/keycloak
   - bases/client
   - bases/server
 
