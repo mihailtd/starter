@@ -68,7 +68,7 @@ Have DevSpace CLI installed - Devspace is a CLI tool for managing k8s clusters, 
 
 ## Initial Setup
 
-- Install all the required manifests in your kubernetes cluster under `k8s/manual` - this contains all resources that should be installed manually. Use `k apply -k ./k8s/manual/overlays/dev/` to install all manifests required for local development (check the `overlays` folder for different environments).
+- Install all the required manifests in your kubernetes cluster under `k8s/manual` - this contains all resources that should be installed manually. Use `k apply -k ./k8s/manual/overlays/dev/ --server-side` to install all manifests required for local development (check the `overlays` folder for different environments).
 - Run `devspace use namespace starter` to switch to the namespace `starter` and instruct devspace to use it
 - Run `devspace dev` to start the application in development mode. This will:
   - Build all docker images
