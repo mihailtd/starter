@@ -2,4 +2,4 @@ resources:
   - namespace.yaml
 
 bases:
-  - bases
+  - bases/pgo
