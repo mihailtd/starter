@@ -1,0 +1,24 @@
+{
+  "name": "@starter/auth-client",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Keycloak authentication theme using TailwindCSS and Alpine",
+  "homepage": "https://localhost:8000",
+  "scripts": {
+    "build": "snowpack build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "alpinejs": "^3.10.2"
+  },
+  "devDependencies": {
+    "@snowpack/plugin-postcss": "^1.4.3",
+    "@tailwindcss/forms": "^0.5.2",
+    "@types/tailwindcss": "^3.0.10",
+    "autoprefixer": "^10.4.7",
+    "cssnano": "^5.1.12",
+    "postcss": "^8.4.14",
+    "snowpack": "^3.8.8",
+    "tailwindcss": "^3.1.4"
+  }
+}
