@@ -1,7 +1,6 @@
-import Keycloak, { KeycloakConfig, KeycloakPromise } from "keycloak-js";
+import Keycloak, { KeycloakConfig } from "keycloak-js";
 import { ref } from "vue";
 
-// implementation
 const config = {
   clientId: "starter-client",
   url: "https://keycloak.local.starter.com/",
@@ -10,7 +9,7 @@ const config = {
 
 const $keycloak: Keycloak = new Keycloak(config);
 let ready = ref(false);
-let pendingPromise = ref<KeycloakPromise<unknown, unknown> | null>(null);
+let pendingPromise = ref<Promise<boolean> | null>(null);
 let isAuthenticated = ref(false);
 let token = ref<string | undefined>();
 let authError = ref();
@@ -46,8 +45,12 @@ export async function initializeKeycloak(): Promise<void> {
       isAuthenticated.value = false;
     };
 
+    $keycloak.onAuthLogout = () => {
+      console.log("logout");
+    };
+
     $keycloak.onAuthSuccess = () => {
-      console.log("on auth sccees");
+      console.log("on auth sccess");
       isAuthenticated.value = true;
       console.log($keycloak.token);
       console.log($keycloak.idToken);
