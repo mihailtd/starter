@@ -147,6 +147,11 @@ dev:
         - "**/node_modules"
         - "**/dist"
         - "**/__tests__"
+    # - imageSelector: ${CLIENT_IMAGE}-dev
+    #   localSubPath: ./@app/client/package.json
+    #   containerPath: /app/@app/client/package.json
+    #   onUpload:
+    #     restartContainer: true
     - imageSelector: ${CLIENT_IMAGE}-dev
       localSubPath: ./@app/gql
       containerPath: /app/@app/gql

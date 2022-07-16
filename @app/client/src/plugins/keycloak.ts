@@ -1,17 +1,5 @@
-import Keycloak, { KeycloakConfig } from "keycloak-js";
+import Keycloak, { KeycloakConfig, KeycloakPromise } from "keycloak-js";
 import { ref } from "vue";
-
-// types
-interface KeycloakState<T = unknown> {
-  isAuthenticated: boolean;
-  hasFailed: boolean;
-  isPending: boolean;
-  token: string;
-  decodedToken: T;
-  username: string;
-  roles: string[];
-  resourceRoles: Record<string, string[]>;
-}
 
 // implementation
 const config = {
@@ -19,17 +7,34 @@ const config = {
   url: "https://keycloak.local.starter.com/",
   realm: "starter",
 } as KeycloakConfig;
-const $keycloak: Keycloak = new Keycloak(config);
 
-let pending = ref(false);
+const $keycloak: Keycloak = new Keycloak(config);
+let ready = ref(false);
+let pendingPromise = ref<KeycloakPromise<unknown, unknown> | null>(null);
 let isAuthenticated = ref(false);
 let token = ref<string | undefined>();
 let authError = ref();
 
+const initKeycloak = () => {
+  if (pendingPromise.value) return pendingPromise.value;
+  const promise = $keycloak
+    .init({
+      onLoad: "check-sso",
+    })
+    .finally(() => {
+      pendingPromise.value = null;
+    });
+  pendingPromise.value = promise;
+  return promise;
+};
+
 export async function initializeKeycloak(): Promise<void> {
+  if (ready.value) {
+    return;
+  }
   try {
-    pending.value = true;
-    const _isAuthenticated = await $keycloak.init({});
+    const _isAuthenticated = await initKeycloak();
+    ready.value = true;
     isAuthenticated.value = !!_isAuthenticated;
     token.value = $keycloak.token;
 
@@ -37,12 +42,28 @@ export async function initializeKeycloak(): Promise<void> {
       token.value = $keycloak.token;
     };
     $keycloak.onTokenExpired = () => updateToken();
+    $keycloak.onAuthLogout = () => {
+      isAuthenticated.value = false;
+    };
+
+    $keycloak.onAuthSuccess = () => {
+      console.log("on auth sccees");
+      isAuthenticated.value = true;
+      console.log($keycloak.token);
+      console.log($keycloak.idToken);
+      console.log($keycloak.refreshToken);
+      setInterval(
+        () =>
+          $keycloak.updateToken(60).catch(() => {
+            $keycloak.clearToken();
+          }),
+        10000
+      );
+    };
   } catch (error) {
     isAuthenticated.value = false;
     authError.value = error;
     throw new Error("Could not read access token");
-  } finally {
-    pending.value = false;
   }
 }
 
@@ -60,9 +81,9 @@ export async function updateToken() {
 export const useKeycloak = () => {
   return {
     keycloak: $keycloak,
-    pending,
     isAuthenticated,
     token,
     authError,
+    ready,
   };
 };
