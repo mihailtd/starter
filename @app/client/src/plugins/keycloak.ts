@@ -7,7 +7,8 @@ const config = {
   realm: "starter",
 } as KeycloakConfig;
 
-const $keycloak: Keycloak = new Keycloak(config);
+const $keycloak = new Keycloak(config);
+const tokenParsed = ref();
 let ready = ref(false);
 let pendingPromise = ref<Promise<boolean> | null>(null);
 let isAuthenticated = ref(false);
@@ -17,7 +18,7 @@ let authError = ref();
 const initKeycloak = () => {
   if (pendingPromise.value) return pendingPromise.value;
   const promise = $keycloak
-    .init({
+    ?.init({
       onLoad: "check-sso",
     })
     .finally(() => {
@@ -36,6 +37,8 @@ export async function initializeKeycloak(): Promise<void> {
     ready.value = true;
     isAuthenticated.value = !!_isAuthenticated;
     token.value = $keycloak.token;
+
+    tokenParsed.value = $keycloak.tokenParsed;
 
     $keycloak.onAuthRefreshSuccess = () => {
       token.value = $keycloak.token;
@@ -66,7 +69,8 @@ export async function initializeKeycloak(): Promise<void> {
   } catch (error) {
     isAuthenticated.value = false;
     authError.value = error;
-    throw new Error("Could not read access token");
+    updateToken();
+    console.error(error);
   }
 }
 
@@ -84,6 +88,7 @@ export async function updateToken() {
 export const useKeycloak = () => {
   return {
     keycloak: $keycloak,
+    tokenParsed,
     isAuthenticated,
     token,
     authError,

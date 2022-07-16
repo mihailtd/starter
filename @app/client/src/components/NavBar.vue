@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { computed, onMounted } from "vue";
+import Avatar from "vue-boring-avatars";
 import { initializeKeycloak, useKeycloak } from "../plugins/keycloak";
-const { keycloak, isAuthenticated } = useKeycloak();
+const { keycloak, isAuthenticated, tokenParsed } = useKeycloak();
 
 const origin = computed(() => {
   return window.location.origin;
+});
+
+const displayName = computed(() => {
+  return tokenParsed.value?.given_name
+    ? `${tokenParsed.value?.given_name} ${tokenParsed.value?.family_name}`
+    : "";
 });
 
 onMounted(async () => {
@@ -13,27 +20,56 @@ onMounted(async () => {
 </script>
 
 <template>
-  <nav class="mb-12 flex w-full bg-orange-300 p-2 pr-4">
-    <div class="self-center text-xl font-bold text-blue-500">Logo</div>
-    <div class="ml-auto flex w-fit self-center text-xl">
-      <span class="mr-2">{{ keycloak.tokenParsed?.given_name }}</span>
-      <span>{{ keycloak.tokenParsed?.family_name }}</span>
+  <nav class="mb-12 grid w-full grid-cols-3 bg-orange-300 p-2 pr-4">
+    <router-link v-slot="{ navigate, href, route }" class="w-fit" to="/" custom>
+      <ElLink
+        :underline="false"
+        class="ml-8 w-fit text-xl font-bold text-red-600 duration-200 hover:text-red-500"
+        :href="href"
+      >
+        Logo
+      </ElLink>
+    </router-link>
+    <div class="flex w-full justify-center self-center">
+      <div
+        v-if="isAuthenticated"
+        class="flex w-fit cursor-pointer items-center justify-center rounded-full bg-red-600 text-xl text-white shadow-sm duration-200 hover:bg-red-500 hover:shadow-lg"
+      >
+        <div class="mx-4 self-center">{{ displayName }}</div>
+        <Avatar :size="30" variant="bauhaus" :name="displayName" />
+      </div>
     </div>
-    <div class="ml-auto w-fit">
-      <button
+    <div class="flex w-full justify-end self-center">
+      <ElLink
         v-if="!isAuthenticated"
-        class="mx-2 h-12 w-32 bg-blue-300 hover:bg-blue-100"
+        :underline="false"
+        class="bg-red-6000 mx-2 h-12 w-32 bg-red-600 text-white duration-200 hover:bg-red-500 hover:text-white hover:shadow-md"
         @click="keycloak.login()"
       >
         login
-      </button>
-      <button
-        v-else
-        class="mx-2 h-12 w-32 bg-blue-300 hover:bg-blue-100"
+      </ElLink>
+      <router-link
+        v-if="isAuthenticated"
+        v-slot="{ navigate, href, route }"
+        to="/protected"
+        custom
+      >
+        <ElLink
+          :underline="false"
+          class="bg-red-6000 mx-2 h-12 w-32 bg-red-600 text-white duration-200 hover:bg-red-500 hover:text-white hover:shadow-md"
+          :href="href"
+        >
+          protected
+        </ElLink>
+      </router-link>
+      <ElLink
+        v-if="isAuthenticated"
+        :underline="false"
+        class="bg-red-6000 mx-2 h-12 w-32 bg-red-600 text-white duration-200 hover:bg-red-500 hover:text-white hover:shadow-md"
         @click="keycloak.logout({ redirectUri: origin })"
       >
         logout
-      </button>
+      </ElLink>
     </div>
   </nav>
 </template>

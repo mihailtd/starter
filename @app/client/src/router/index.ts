@@ -11,8 +11,8 @@ const routes = [
   {
     name: "protected",
     path: "/protected",
-    component: ProtectedVue,
     beforeEnter: [checkAuth],
+    component: ProtectedVue,
   },
 ];
 

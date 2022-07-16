@@ -11606,6 +11606,11 @@ vm2@^3.9.2:
     acorn "^8.7.0"
     acorn-walk "^8.2.0"
 
+vue-boring-avatars@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/vue-boring-avatars/-/vue-boring-avatars-1.1.0.tgz#01e3f9380007464c5030daa63c58943929272ee3"
+  integrity sha512-eiq79Dh1E6mhRiSLPPcL2oTyJFHfQow+5p7oUJr9i/DpqyCjEX0ayEvZhie1EDKyDcVfVbmqXXBeXBQOr2UAdw==
+
 vue-demi@*:
   version "0.13.5"
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.13.5.tgz#d5eddbc9eaefb89ce5995269d1fa6b0486312092"
