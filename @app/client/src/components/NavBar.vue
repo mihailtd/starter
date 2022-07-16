@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted } from "vue";
 import Avatar from "vue-boring-avatars";
+import { useRouter } from "vue-router";
 import { initializeKeycloak, useKeycloak } from "../plugins/keycloak";
 const { keycloak, isAuthenticated, tokenParsed } = useKeycloak();
+
+const { currentRoute } = useRouter();
 
 const origin = computed(() => {
   return window.location.origin;
@@ -49,9 +52,12 @@ onMounted(async () => {
         login
       </ElLink>
       <router-link
-        v-if="isAuthenticated"
+        v-if="
+          isAuthenticated &&
+          !currentRoute.name?.toString().startsWith('dashboard')
+        "
         v-slot="{ navigate, href, route }"
-        to="/protected"
+        to="/dashboard"
         custom
       >
         <ElLink
@@ -59,7 +65,7 @@ onMounted(async () => {
           class="bg-red-6000 mx-2 h-12 w-32 bg-red-600 text-white duration-200 hover:bg-red-500 hover:text-white hover:shadow-md"
           :href="href"
         >
-          protected
+          dashboard
         </ElLink>
       </router-link>
       <ElLink

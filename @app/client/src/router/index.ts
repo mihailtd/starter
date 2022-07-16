@@ -9,8 +9,8 @@ const routes = [
     component: HomeVue,
   },
   {
-    name: "protected",
-    path: "/protected",
+    name: "dashboard",
+    path: "/dashboard",
     beforeEnter: [checkAuth],
     component: ProtectedVue,
   },
