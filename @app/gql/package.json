@@ -11,12 +11,12 @@
     "watch": "yarn codegen --watch & tsc -b -w"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "^3.2.0",
-    "@graphql-codegen/cli": "^2.8.1",
-    "@graphql-codegen/fragment-matcher": "^3.3.0",
-    "@graphql-codegen/typescript": "^2.7.1",
-    "@graphql-codegen/typescript-graphql-files-modules": "^2.2.0",
-    "@graphql-codegen/typescript-operations": "^2.5.1",
-    "@graphql-codegen/typescript-vue-apollo": "^3.3.1"
+    "@graphql-codegen/add": "^3.2.1",
+    "@graphql-codegen/cli": "^2.11.6",
+    "@graphql-codegen/fragment-matcher": "^3.3.1",
+    "@graphql-codegen/typescript": "^2.7.3",
+    "@graphql-codegen/typescript-graphql-files-modules": "^2.2.1",
+    "@graphql-codegen/typescript-operations": "^2.5.3",
+    "@graphql-codegen/typescript-vue-apollo": "^3.3.3"
   }
 }

@@ -8,7 +8,7 @@
     "declarationDir": "dist",
     "lib": ["ESNext", "esnext.asynciterable"],
     "target": "ESNext",
-    "module": "commonjs"
+    "module": "CommonJS"
   },
   "include": ["src"],
   "ts-node": {
