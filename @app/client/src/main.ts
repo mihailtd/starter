@@ -6,7 +6,7 @@ import App from "./App.vue";
 import "element-plus/dist/index.css";
 import "./index.pcss";
 import { apolloClient } from "./plugins/apollo";
-import router from "./router";
+import { router } from "./router";
 
 const app = createApp({
   setup() {

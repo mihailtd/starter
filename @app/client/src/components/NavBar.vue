@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
+import { computed, onMounted, watch } from "vue";
 import Avatar from "vue-boring-avatars";
 import { useRouter } from "vue-router";
 import { initializeKeycloak, useKeycloak } from "../plugins/keycloak";
-const { keycloak, isAuthenticated, tokenParsed } = useKeycloak();
+const { keycloak, isAuthenticated, tokenParsed, token } = useKeycloak();
 
 const { currentRoute } = useRouter();
 
@@ -15,6 +15,10 @@ const displayName = computed(() => {
   return tokenParsed.value?.given_name
     ? `${tokenParsed.value?.given_name} ${tokenParsed.value?.family_name}`
     : "";
+});
+
+watch(token, () => {
+  console.log(token.value);
 });
 
 onMounted(async () => {

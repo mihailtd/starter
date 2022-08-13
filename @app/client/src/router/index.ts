@@ -11,27 +11,37 @@ const routes = [
   {
     name: "dashboard",
     path: "/dashboard",
-    beforeEnter: [checkAuth],
     component: ProtectedVue,
+    meta: {
+      requireAuth: true,
+    },
   },
 ];
 
-function checkAuth(to, _from, next) {
+async function checkAuth(to, _from, next) {
+  console.log(to);
+  if (!to.meta.requireAuth) return next();
   const { isAuthenticated, keycloak, ready } = useKeycloak();
+  console.log(to);
+  console.log(isAuthenticated.value);
+  console.log(ready.value);
   if (!ready.value) {
-    initializeKeycloak().then(() => {
-      if (!isAuthenticated.value) {
-        return keycloak.login({
-          redirectUri: `${window.location.origin}${to.path}`,
-        });
-      } else {
-        return next();
-      }
+    await initializeKeycloak();
+  }
+
+  if (!isAuthenticated.value) {
+    console.log(`${window.location.origin}/${to.path}`);
+    await keycloak.login({
+      redirectUri: `${window.location.origin}/${to.path}`,
     });
+  } else {
+    return next();
   }
 }
 
-export default createRouter({
+export const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+router.beforeEach(checkAuth);

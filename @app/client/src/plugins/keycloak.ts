@@ -43,7 +43,7 @@ export async function initializeKeycloak(): Promise<void> {
     $keycloak.onAuthRefreshSuccess = () => {
       token.value = $keycloak.token;
     };
-    $keycloak.onTokenExpired = () => updateToken();
+    $keycloak.onTokenExpired = () => {};
     $keycloak.onAuthLogout = () => {
       isAuthenticated.value = false;
     };
@@ -52,15 +52,18 @@ export async function initializeKeycloak(): Promise<void> {
       console.log("logout");
     };
 
+    console.log($keycloak.token);
+    console.log($keycloak.idToken);
+    console.log($keycloak.refreshToken);
+
     $keycloak.onAuthSuccess = () => {
       console.log("on auth sccess");
       isAuthenticated.value = true;
-      console.log($keycloak.token);
-      console.log($keycloak.idToken);
-      console.log($keycloak.refreshToken);
+
       setInterval(
         () =>
-          $keycloak.updateToken(60).catch(() => {
+          $keycloak.updateToken(60).catch((err) => {
+            console.log(err);
             $keycloak.clearToken();
           }),
         10000
@@ -69,7 +72,7 @@ export async function initializeKeycloak(): Promise<void> {
   } catch (error) {
     isAuthenticated.value = false;
     authError.value = error;
-    updateToken();
+    // updateToken().catch((err) => console.log(err));
     console.error(error);
   }
 }
