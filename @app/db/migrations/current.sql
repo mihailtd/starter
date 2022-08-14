@@ -29,17 +29,37 @@ CREATE SCHEMA ":DB_SCHEMA_NAME";
 
 GRANT usage ON SCHEMA public, ":DB_SCHEMA_NAME" TO ":SERVER_ROLE";
 
+GRANT ALL ON SCHEMA ":DB_SCHEMA_NAME" TO ":SERVER_ROLE";
+
 ALTER DEFAULT privileges IN SCHEMA public, ":DB_SCHEMA_NAME" GRANT usage,
 SELECT
   ON sequences TO ":SERVER_ROLE";
 
 ALTER DEFAULT privileges IN SCHEMA public, ":DB_SCHEMA_NAME" GRANT EXECUTE ON functions TO ":SERVER_ROLE";
 
-CREATE TABLE ":DB_SCHEMA_NAME".users (id uuid PRIMARY KEY DEFAULT uuid_generate_v4 (), username text NOT NULL, password
-  text NOT NULL, email text NOT NULL, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL
-  DEFAULT now()
+-- function used to determine user ID used for RLS
+CREATE OR REPLACE FUNCTION ":DB_SCHEMA_NAME".current_user_id ()
+  RETURNS uuid
+  LANGUAGE SQL
+  STABLE
+  AS $function$
+  SELECT
+    nullif (current_setting('jwt.claims.user_id', TRUE), '')::uuid;
+
+$function$;
+
+DROP TABLE IF EXISTS ":DB_SCHEMA_NAME".users;
+
+CREATE TABLE ":DB_SCHEMA_NAME".users (id uuid PRIMARY KEY DEFAULT uuid_generate_v4 (), email text NOT NULL, created_at
+  timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now()
 );
 
 GRANT SELECT, UPDATE ON ":DB_SCHEMA_NAME".users TO ":SERVER_ROLE";
 
---test
+ALTER TABLE ":DB_SCHEMA_NAME".users ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS users_user ON ":DB_SCHEMA_NAME".users;
+
+CREATE POLICY users_user ON ":DB_SCHEMA_NAME".users TO ":SERVER_ROLE"
+  USING (":DB_SCHEMA_NAME".current_user_id () = "id")
+  WITH CHECK ("id" = ":DB_SCHEMA_NAME".current_user_id ());
