@@ -76,6 +76,7 @@ export async function makeApp({
    * express middleware. These helpers may be asynchronous, but they should
    * operate very rapidly to enable quick as possible server startup.
    */
+  middleware.installKeycloak(app);
   middleware.installDatabasePools(app);
   middleware.installHelmet(app);
   middleware.installSameOrigin(app);

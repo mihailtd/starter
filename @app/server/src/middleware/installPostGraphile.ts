@@ -2,6 +2,7 @@
 import PgSimplifyInflectorPlugin from "@graphile-contrib/pg-simplify-inflector";
 import { Express, Request, Response } from "express";
 import { NodePlugin } from "graphile-build";
+import fetch from "node-fetch-commonjs";
 import { resolve } from "path";
 import { Pool, PoolClient } from "pg";
 import {
@@ -15,8 +16,9 @@ import { makePgSmartTagsFromFilePlugin } from "postgraphile/plugins";
 import { getHttpServer, getWebsocketMiddlewares } from "../app";
 import RemoveQueryQueryPlugin from "../plugins/RemoveQueryQueryPlugin";
 import handleErrors from "../utils/handleErrors";
-import { getAuthPgPool, getRootPgPool } from "./installDatabasePools";
-
+import { getAuthPgPool } from "./installDatabasePools";
+const jwkToPem = require("jwk-to-pem");
+const jwt = require("jsonwebtoken");
 export interface OurGraphQLContext {
   pgClient: PoolClient;
   sessionId: string | null;
@@ -61,7 +63,6 @@ const pluginHook = makePluginHook([
 
 interface IPostGraphileOptionsOptions {
   websocketMiddlewares?: Middleware<Request, Response>[];
-  rootPgPool: Pool;
 }
 
 export function getPostGraphileOptions({
@@ -72,7 +73,7 @@ export function getPostGraphileOptions({
     pluginHook,
 
     // This is so that PostGraphile installs the watch fixtures, it's also needed to enable live queries
-    ownerConnectionString: process.env.ROOT_DATABASE_URL,
+    ownerConnectionString: process.env.OWNER_DATABASE_URL,
 
     // On production we still want to start even if the database isn't available.
     // On development, we want to deal nicely with issues in the database.
@@ -151,6 +152,38 @@ export function getPostGraphileOptions({
       ? `${__dirname}/../../../../schemas/schema.graphql`
       : undefined,
 
+    pgSettings: async (req) => {
+      const token = req.headers.authorization?.split(" ")[1];
+
+      const settings = {};
+      if (token) {
+        try {
+          const openIdInfoResult = await fetch(
+            `http://keycloak-service/realms/${process.env.KEYCLOAK_APP_REALM}/protocol/openid-connect/certs`
+          );
+          const openIdInfo = (await openIdInfoResult.json()) as any;
+          if (!openIdInfo) {
+            throw new Error("Service Unavailable");
+          }
+          const rsaKey = openIdInfo?.keys.find((key: any) => {
+            return key.alg === "RS256";
+          });
+
+          const publicKey = jwkToPem(rsaKey);
+
+          const result = jwt.verify(token, publicKey, {
+            algorithms: ["RS256"],
+          });
+          settings["jwt.claims.user_id"] = result.sub;
+        } catch (error) {
+          console.log(error);
+          throw new Error("Unauthorized");
+        }
+      }
+
+      return settings;
+    },
+
     /*
      * Plugins to enhance the GraphQL schema, see:
      *   https://www.graphile.org/postgraphile/extending/
@@ -189,9 +222,9 @@ export function getPostGraphileOptions({
 }
 
 export default function installPostGraphile(app: Express) {
+  console.log(isDev);
   const websocketMiddlewares = getWebsocketMiddlewares(app);
   const authPgPool = getAuthPgPool(app);
-  const rootPgPool = getRootPgPool(app);
   const middleware = postgraphile<Request, Response>(
     // TODO: fix type issue here
     // @ts-ignore
@@ -199,7 +232,6 @@ export default function installPostGraphile(app: Express) {
     process.env.DB_SCHEMA_NAME,
     getPostGraphileOptions({
       websocketMiddlewares,
-      rootPgPool,
     })
   );
 

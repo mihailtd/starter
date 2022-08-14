@@ -4,6 +4,7 @@ import installDatabasePools from "./installDatabasePools";
 import installErrorHandler from "./installErrorHandler";
 import installForceSSL from "./installForceSSL";
 import installHelmet from "./installHelmet";
+import installKeycloak from "./installKeycloak";
 import installLogging from "./installLogging";
 import installPostGraphile from "./installPostGraphile";
 import installSameOrigin from "./installSameOrigin";
@@ -20,4 +21,5 @@ export {
   installPostGraphile,
   installSameOrigin,
   installSharedStatic,
+  installKeycloak,
 };
