@@ -37,6 +37,7 @@ type PageInfo {
 
 """The root query type which gives access points into the data universe."""
 type Query {
+  currentUserId: UUID
   user(id: UUID!): User
 
   """Reads and enables pagination through a set of `User`."""
@@ -116,9 +117,7 @@ type User {
   createdAt: Datetime!
   email: String!
   id: UUID!
-  password: String!
   updatedAt: Datetime!
-  username: String!
 }
 
 """
@@ -134,9 +133,7 @@ input UserPatch {
   createdAt: Datetime
   email: String
   id: UUID
-  password: String
   updatedAt: Datetime
-  username: String
 }
 
 """A connection to a list of `User` values."""

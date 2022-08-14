@@ -58,6 +58,7 @@ export type PageInfo = {
 /** The root query type which gives access points into the data universe. */
 export type Query = {
   __typename?: 'Query';
+  currentUserId?: Maybe<Scalars['UUID']>;
   user?: Maybe<User>;
   /** Reads and enables pagination through a set of `User`. */
   users?: Maybe<UsersConnection>;
