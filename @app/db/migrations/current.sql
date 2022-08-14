@@ -50,8 +50,8 @@ $function$;
 
 DROP TABLE IF EXISTS ":DB_SCHEMA_NAME".users;
 
-CREATE TABLE ":DB_SCHEMA_NAME".users (id uuid PRIMARY KEY DEFAULT uuid_generate_v4 (), email text NOT NULL, created_at
-  timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now()
+CREATE TABLE ":DB_SCHEMA_NAME".users (id uuid PRIMARY KEY DEFAULT uuid_generate_v4 (), username text, email text NOT
+  NULL, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now()
 );
 
 GRANT SELECT, UPDATE ON ":DB_SCHEMA_NAME".users TO ":SERVER_ROLE";

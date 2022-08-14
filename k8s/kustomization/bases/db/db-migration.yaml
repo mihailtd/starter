@@ -16,7 +16,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: db-migration
-          image: starter/db-migration-dev
+          image: starter/db-migration
           imagePullPolicy: IfNotPresent
           resources:
             limits:

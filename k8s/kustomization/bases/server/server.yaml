@@ -16,7 +16,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: server
-          image: starter/server-dev
+          image: starter/server
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:

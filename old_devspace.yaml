@@ -1,0 +1,337 @@
+version: v1beta11
+
+# `vars` specifies variables which may be used as ${VAR_NAME} in devspace.yaml
+vars:
+  - name: DB_MIGRATION_IMAGE
+    value: starter/db-migration
+  - name: CLIENT_IMAGE
+    value: starter/client
+  - name: KEYCLOAK_IMAGE
+    value: starter/keycloak
+  - name: SERVER_IMAGE
+    value: starter/server
+  - name: GQL_IMAGE
+    value: starter/gql
+
+# `deployments` tells DevSpace how to deploy this project
+deployments:
+  - name: starter
+    # This deployment uses `kubectl` but you can also define `helm` deployments
+    kubectl:
+      manifests:
+        - ./k8s/kustomization/overlays/dev/kustomization.yaml
+      kustomize: true
+
+# `dev` only applies when you run `devspace dev`
+dev:
+  logs:
+    showLast: 1000
+  # `dev.ports` specifies all ports that should be forwarded while `devspace dev` is running
+  # Port-forwarding lets you access your application via localhost on your local machine
+  ports:
+    - labelSelector:
+        name: starter-db
+      forward:
+        - port: 5432
+
+  # `dev.open` tells DevSpace to open certain URLs as soon as they return HTTP status 200
+  # Since we configured port-forwarding, we can use a localhost address here to access our application
+  open:
+    - url: http://localhost:8090
+    - url: https://client.local.starter.com
+    - url: https://server.local.starter.com/graphiql
+
+  # `dev.sync` configures a file sync between our Pods in k8s and your local project files
+  sync:
+    - imageSelector: ${GQL_IMAGE}-dev # Select the Pod that runs our `${IMAGE}`
+      localSubPath: ./@app/gql
+      containerPath: /app/@app/gql
+      excludePaths:
+        - .git/
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
+    - imageSelector: ${GQL_IMAGE}-dev
+      localSubPath: ./schemas
+      containerPath: /app/schemas
+      excludePaths:
+        - .git/
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
+    - imageSelector: ${GQL_IMAGE}-dev
+      localSubPath: ./@app/client
+      containerPath: /app/@app/client
+      excludePaths:
+        - .git/
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
+    - imageSelector: ${SERVER_IMAGE}-dev
+      localSubPath: ./@app/server
+      containerPath: /app/@app/server
+      excludePaths:
+        - .git/
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
+    - imageSelector: ${SERVER_IMAGE}-dev
+      localSubPath: ./schemas
+      containerPath: /app/schemas
+      excludePaths:
+        - .git/
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
+    - imageSelector: ${CLIENT_IMAGE}-dev
+      localSubPath: ./@app/client
+      containerPath: /app/@app/client
+      excludePaths:
+        - .git/
+        - "**/node_modules"
+        - "**/serve"
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
+    # - imageSelector: ${CLIENT_IMAGE}-dev
+    #   localSubPath: ./@app/client/package.json
+    #   containerPath: /app/@app/client/package.json
+    #   onUpload:
+    #     restartContainer: true
+    - imageSelector: ${CLIENT_IMAGE}-dev
+      localSubPath: ./@app/gql
+      containerPath: /app/@app/gql
+      excludePaths:
+        - .git/
+        - "**/node_modules"
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/__tests__"
+    - imageSelector: ${DB_MIGRATION_IMAGE}-dev
+      localSubPath: ./@app/db
+      containerPath: /app/@app/db
+      excludePaths:
+        - .git/
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
+    - imageSelector: ${DB_MIGRATION_IMAGE}-dev
+      localSubPath: ./schemas
+      containerPath: /app/schemas
+      excludePaths:
+        - .git/
+      uploadExcludePaths:
+        - .docker
+        - .env
+        - .vscode
+        - "@app/e2e"
+        - "*Dockerfile*"
+        - "*docker-compose*"
+        - "**/.DS_Store"
+        - "**/.next"
+        - "**/node_modules"
+        - "**/dist"
+        - "**/__tests__"
+
+  # `dev.terminal` tells DevSpace to open a terminal as a last step during `devspace dev`
+  # terminal:
+  #   imageSelector: ${IMAGE} # Select the Pod that runs our `${IMAGE}`
+  #   # With this optional `command` we can tell DevSpace to run a script when opening the terminal
+  #   # This is often useful to display help info for new users or perform initial tasks (e.g. installing dependencies)
+  #   # DevSpace has generated an example ./devspace_start.sh file in your local project - Feel free to customize it!
+  #   command:
+  #   - ./devspace_start.sh
+
+  # Since our Helm charts and manifests deployments are often optimized for production,
+  # DevSpace let's you swap out Pods dynamically to get a better dev environment
+  # replacePods:
+  # - imageSelector: ${IMAGE} # Select the Pod that runs our `${IMAGE}`
+  #   # Since the `${IMAGE}` used to start our main application pod may be distroless or not have any dev tooling, let's replace it with a dev-optimized image
+  #   # DevSpace provides a sample image here but you can use any image for your specific needs
+  #   replaceImage: loftsh/alpine:latest
+  #   # Besides replacing the container image, let's also apply some patches to the `spec` of our Pod
+  #   # We are overwriting `command` + `args` for the first container in our selected Pod, so it starts with `sleep 9999999`
+  #   # Using `sleep 9999999` as PID 1 (instead of the regular ENTRYPOINT), allows you to start the application manually
+  #   patches:
+  #   - op: replace
+  #     path: spec.containers[0].command
+  #     value:
+  #     - sleep
+  #   - op: replace
+  #     path: spec.containers[0].args
+  #     value:
+  #     - "9999999"
+  #   - op: remove
+  #     path: spec.containers[0].securityContext
+
+commands:
+  - name: commit-db-migration
+    command: "devspace enter yarn db commit --image-selector starter/db-migration-dev:latest"
+
+images:
+  keycloak:
+    image: ${KEYCLOAK_IMAGE}
+    injectRestartHelper: false
+    tags:
+      - ${DEVSPACE_GIT_COMMIT}
+    dockerfile: ./docker/Dockerfile.keycloak
+    context: ./
+    rebuildStrategy: always
+    build:
+      docker:
+        skipPush: true
+  server-dev:
+    image: ${SERVER_IMAGE}-dev
+    injectRestartHelper: true
+    tags:
+      - ${DEVSPACE_GIT_COMMIT}
+    dockerfile: ./docker/Dockerfile.server.dev
+    context: ./
+    rebuildStrategy: always
+    build:
+      docker:
+        skipPush: true
+  client-dev:
+    image: ${CLIENT_IMAGE}-dev
+    injectRestartHelper: true
+    tags:
+      - ${DEVSPACE_GIT_COMMIT}
+    dockerfile: ./docker/Dockerfile.client.dev
+    context: ./
+    rebuildStrategy: always
+    build:
+      docker:
+        skipPush: true
+  db-migration-dev:
+    image: ${DB_MIGRATION_IMAGE}-dev
+    injectRestartHelper: true
+    tags:
+      - ${DEVSPACE_GIT_COMMIT}
+    dockerfile: ./docker/Dockerfile.db-migration.dev
+    context: ./
+    rebuildStrategy: always
+    build:
+      docker:
+        skipPush: true
+  gql-dev:
+    image: ${GQL_IMAGE}-dev
+    injectRestartHelper: true
+    tags:
+      - ${DEVSPACE_GIT_COMMIT}
+    dockerfile: ./docker/Dockerfile.gql.dev
+    context: ./
+    rebuildStrategy: always
+    build:
+      docker:
+        skipPush: true
+
+# `profiles` lets you modify the config above for different environments (e.g. dev vs production)
+profiles:
+  # This profile is called `production` and you can use it for example using: devspace deploy -p production
+  # We generally recommend to use the base config without any profiles as optimized for development (e.g. image build+push is disabled)
+  - name: staging
+    # This profile adds our image to the config so that DevSpace will build, tag and push our image before the deployment
+    replace:
+      deployments:
+      dev:
+      dependencies:
+      hooks:
+      images:
+        server:
+          image: registry.gitlab.com/farcasmihai91/${SERVER_IMAGE}
+          dockerfile: ./docker/Dockerfile.server
+          tags:
+            - ${DEVSPACE_GIT_COMMIT}
+          context: ./
+          rebuildStrategy: always
+          build:
+            kaniko:
+        db-migration:
+          image: registry.gitlab.com/farcasmihai91/${DB_MIGRATION_IMAGE}
+          dockerfile: ./docker/Dockerfile.db-migration
+          tags:
+            - ${DEVSPACE_GIT_COMMIT}
+          context: ./
+          rebuildStrategy: always
+          build:
+            kaniko:
+        client:
+          image: registry.gitlab.com/farcasmihai91/${CLIENT_IMAGE}
+          dockerfile: ./docker/Dockerfile.client
+          tags:
+            - ${DEVSPACE_GIT_COMMIT}
+          context: ./
+          rebuildStrategy: always
+          build:
+            kaniko:

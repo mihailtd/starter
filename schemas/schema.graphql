@@ -118,6 +118,7 @@ type User {
   email: String!
   id: UUID!
   updatedAt: Datetime!
+  username: String
 }
 
 """
@@ -134,6 +135,7 @@ input UserPatch {
   email: String
   id: UUID
   updatedAt: Datetime
+  username: String
 }
 
 """A connection to a list of `User` values."""
