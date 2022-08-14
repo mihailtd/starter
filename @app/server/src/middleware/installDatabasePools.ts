@@ -23,14 +23,14 @@ function swallowPoolError(_error: Error) {
 export default (app: Express) => {
   // This pool runs as the database owner, so it can do anything.
   const rootPgPool = new Pool({
-    connectionString: process.env.OWNER_DATABASE_URL,
+    connectionString: process.env.ROOT_DATABASE_URL,
   });
   rootPgPool.on("error", swallowPoolError);
   app.set("rootPgPool", rootPgPool);
 
   // This pool runs as the unprivileged user, it's what PostGraphile uses.
   const authPgPool = new Pool({
-    connectionString: process.env.DATABASE_AUTHENTICATOR_URL,
+    connectionString: process.env.DATABASE_URL,
   });
   authPgPool.on("error", swallowPoolError);
   app.set("authPgPool", authPgPool);
