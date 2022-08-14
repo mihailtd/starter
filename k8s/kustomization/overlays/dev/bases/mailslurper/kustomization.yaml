@@ -1,0 +1,8 @@
+# TODO: change namespace
+namespace: starter
+
+resources:
+  - mailslurper.yaml
+  - mailslurper-service.yaml
+  - mailslurper-smtp-service.yaml
+  - mailslurper-ingress.yaml

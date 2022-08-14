@@ -4,7 +4,8 @@ bases:
   - ../../bases/db
   - ../../bases/server
   - ../../bases/gql
-  - ../../bases/keycloak
+  # - ../../bases/keycloak
+  - ../../bases/hanko
   - bases/mailhog
   - bases/client
   - bases/server
@@ -16,6 +17,9 @@ configMapGenerator:
   - name: dev-env-configmap
     envs:
       - .env
+  - name: hanko-config
+    files:
+      - hanko-config.yaml
   - name: db-initialize-configmap
     files:
       - init.sql

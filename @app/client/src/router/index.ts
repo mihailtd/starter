@@ -1,12 +1,18 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { initializeKeycloak, useKeycloak } from "../plugins/keycloak";
+import AuthVue from "../views/Auth.vue";
 import HomeVue from "../views/Home.vue";
 import ProtectedVue from "../views/Protected.vue";
+
 const routes = [
   {
     name: "home",
     path: "/",
     component: HomeVue,
+  },
+  {
+    name: "login",
+    path: "/login",
+    component: AuthVue,
   },
   {
     name: "dashboard",
@@ -19,24 +25,7 @@ const routes = [
 ];
 
 async function checkAuth(to, _from, next) {
-  console.log(to);
-  if (!to.meta.requireAuth) return next();
-  const { isAuthenticated, keycloak, ready } = useKeycloak();
-  console.log(to);
-  console.log(isAuthenticated.value);
-  console.log(ready.value);
-  if (!ready.value) {
-    await initializeKeycloak();
-  }
-
-  if (!isAuthenticated.value) {
-    console.log(`${window.location.origin}/${to.path}`);
-    await keycloak.login({
-      redirectUri: `${window.location.origin}/${to.path}`,
-    });
-  } else {
-    return next();
-  }
+  return next();
 }
 
 export const router = createRouter({

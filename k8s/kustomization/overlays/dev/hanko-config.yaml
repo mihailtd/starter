@@ -1,0 +1,145 @@
+server:
+  ## public ##
+  #
+  # Configuration for the public API.
+  #
+  public:
+    ## address ##
+    #
+    # The address the public API will listen and handle requests on.
+    #
+    address: ":8000"
+    ## cors ##
+    #
+    # Cross Origin Resource Sharing for public endpoints.
+    #
+    cors:
+      ## enabled ##
+      #
+      # Sets whether cors is enabled or not.
+      #
+      # Default value: false
+      #
+      enabled: true
+      allow_credentials: true
+      allow_origins:
+        - "https://client.local.starter.com"
+        - "*"
+      allow_methods:
+        - "GET"
+        - "POST"
+        - "PUT"
+      allow_headers:
+        - "Content-Type"
+        - "X-Auth-Token"
+      expose_headers:
+        - "X-Auth-Token"
+      max_age: 0
+  ## private ##
+  #
+  # Configuration for the private API.
+  #
+  private:
+    ## address ##
+    #
+    # The address the private API will listen and handle requests on.
+    #
+    address: ":8001"
+database:
+  user: hanko
+  password: napgbS4Tai8eXnu8TSpqjf7q
+  host: hankodb-primary.starter.svc
+  port: 5432
+  dialect: postgres
+passcode:
+  ## ttl ##
+  #
+  # How long a passcode is valid. Value is in seconds.
+  #
+  # Default value: 300
+  #
+  ttl: 300
+  email:
+    from_address: no-reply@starter.com
+    from_name: "Starter"
+  smtp:
+    host: mailslurper-smtp-service
+    port: 25
+    # user: "test"
+    # password: "test"
+secrets:
+  keys:
+    - bQeThWmZq4t7w!z%
+service:
+  name: Next Unicorn Authentication Service
+webauthn:
+  ## timeout ##
+  #
+  # How long a WebAuthn request is valid and the user can confirm it. Value is in milliseconds.
+  #
+  # Default: 60000
+  #
+  timeout: 60000
+  relying_party:
+    id: starter.com
+    display_name: Starter
+    origin: "https://client.starter.com"
+session:
+  ## lifespan ##
+  #
+  # How long a session JWT is valid.
+  #
+  # Default value: 1h
+  #
+  # Examples:
+  # - 1h
+  # - 10m
+  # - 720h
+  # - 15h115m
+  #
+  lifespan: "1h"
+  cookie:
+    ## domain ##
+    #
+    # The domain the cookie will be bound to. Works for subdomains, but not cross-domain.
+    #
+    domain: "starter.com"
+    ## http_only ##
+    #
+    # HTTP-only cookies or accessible by javascript.
+    #
+    # Default value: true
+    #
+    http_only: true
+    ## same_site ##
+    #
+    # Same-site attribute of the session cookie.
+    #
+    # Default value: strict
+    #
+    # One of:
+    # - strict
+    # - lax
+    # - none
+    #
+    same_site: "strict"
+    ## secure ##
+    #
+    # Sets whether the cookie can only be read on secure sites.
+    #
+    # Default value: true
+    #
+    secure: true
+  ## enable_auth_token_header ##
+  #
+  # The JWT will be transmitted via the X-Auth-Token header. Enable during cross-domain operations.
+  #
+  enable_auth_token_header: false
+password:
+  ## enabled ##
+  #
+  # Enables or disables passwords for all users.
+  #
+  # Default value: false
+  #
+  enabled: true

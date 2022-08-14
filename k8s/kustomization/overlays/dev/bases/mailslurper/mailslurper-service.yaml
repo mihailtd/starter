@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mailslurper-service
+spec:
+  type: ClusterIP
+  selector:
+    app: mailslurper
+  ports:
+    - name: mailslurper
+      port: 80
+      targetPort: 8080

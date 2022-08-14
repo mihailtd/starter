@@ -1,3 +1,4 @@
+import "@teamhanko/hanko-elements/dist/element.hanko-auth.js";
 import { DefaultApolloClient } from "@vue/apollo-composable";
 import ElementPlus from "element-plus";
 import { createApp, h, provide } from "vue";

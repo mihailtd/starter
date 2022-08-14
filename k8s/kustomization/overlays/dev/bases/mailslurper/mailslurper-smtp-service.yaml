@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mailslurper-smtp-service
+spec:
+  type: ClusterIP
+  selector:
+    app: mailslurper
+  ports:
+    - name: mailslurper-smtp
+      port: 25
+      targetPort: 2500

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mailslurper
+  namespace: mailslurper
+  labels:
+    app: mailslurper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mailslurper
+  template:
+    metadata:
+      labels:
+        app: mailslurper
+    spec:
+      containers:
+        - name: mailslurper
+          image: marcopas/docker-mailslurper:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: web
+            - containerPort: 8085
+              name: service
+            - containerPort: 2500
+              name: smtp
+          resources:
+            limits:
+              cpu: "150m"
+              memory: "300Mi"

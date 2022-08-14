@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: hanko-private-service
+spec:
+  type: ClusterIP
+  selector:
+    app: hanko
+  ports:
+    - name: hanko
+      port: 80
+      targetPort: 8001

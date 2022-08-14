@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hanko
+  namespace: hanko
+  labels:
+    app: hanko
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hanko
+  template:
+    metadata:
+      labels:
+        app: hanko
+    spec:
+      containers:
+        - name: hanko
+          image: ghcr.io/teamhanko/hanko:main
+          imagePullPolicy: IfNotPresent
+          args:
+            - serve
+            - all
+          ports:
+            - containerPort: 8000
+              name: public
+            - containerPort: 8001
+              name: private
+          resources:
+            limits:
+              cpu: "300m"
+              memory: "400Mi"
+          volumeMounts:
+            - name: hanko-config
+              mountPath: /config/config.yaml
+              subPath: hanko-config.yaml
+      initContainers:
+        - name: hanko-migrate
+          image: ghcr.io/teamhanko/hanko:main
+          imagePullPolicy: IfNotPresent
+          args:
+            - migrate
+            - up
+          volumeMounts:
+            - name: hanko-config
+              mountPath: /config/config.yaml
+              subPath: hanko-config.yaml
+      volumes:
+        - name: hanko-config
+          configMap:
+            name: hanko-config

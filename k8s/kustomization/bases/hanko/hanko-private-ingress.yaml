@@ -1,0 +1,19 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hanko-private-ingress
+  namespace: starter
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`hanko-private.local.starter.com`)
+      priority: 10
+      services:
+        - name: hanko-private-service
+          port: 80
+  tls:
+    certResolver: default
+    options:
+      name: hanko-private-service

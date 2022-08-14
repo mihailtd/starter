@@ -41,7 +41,7 @@ onResult((result) => {
 </script>
 
 <template>
-  <div v-loading.fullscreen.lock="!ready">
+  <div>
     <NavBarVue />
     <router-view></router-view>
   </div>

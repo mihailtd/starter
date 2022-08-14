@@ -26,6 +26,10 @@ export default defineConfig({
         target: "http://server-service",
         changeOrigin: true,
       },
+      // "/auth": {
+      //   target: "http://hanko-service",
+      //   changeOrigin: true,
+      // },
     },
     host: "0.0.0.0",
     port: 3000,

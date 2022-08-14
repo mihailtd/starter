@@ -1,0 +1,11 @@
+# TODO: change namespace
+namespace: starter
+
+resources:
+  - hanko.yaml
+  - hanko-service.yaml
+  - hanko-ingress.yaml
+  - hanko-ingress-web.yaml
+  - hanko-private-service.yaml
+  - hanko-private-ingress.yaml
+  - hanko-private-ingress-web.yaml

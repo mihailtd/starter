@@ -1,12 +1,12 @@
 apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
 metadata:
-  name: keycloakdb
+  name: hankodb
 spec:
   image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.3-0
   postgresVersion: 14
   instances:
-    - name: keycloakdb-1
+    - name: hankodb-1
       replicas: 1
       dataVolumeClaimSpec:
         accessModes:
@@ -22,8 +22,8 @@ spec:
                 topologyKey: kubernetes.io/hostname
                 labelSelector:
                   matchLabels:
-                    postgres-operator.crunchydata.com/cluster: keycloakdb
-                    postgres-operator.crunchydata.com/instance-set: keycloakdb-1
+                    postgres-operator.crunchydata.com/cluster: hankodb
+                    postgres-operator.crunchydata.com/instance-set: hankodb-1
   backups:
     pgbackrest:
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.38-1
@@ -36,3 +36,16 @@ spec:
               resources:
                 requests:
                   storage: 1Gi
+  users:
+    - name: hanko
+      options: SUPERUSER
+      password:
+        type: AlphaNumeric
+      databases:
+        - hanko
+  patroni:
+    dynamicConfiguration:
+      postgresql:
+        pg_hba:
+          # TODO: find a more secure way to do this
+          - "host all all 0.0.0.0/0 md5"
