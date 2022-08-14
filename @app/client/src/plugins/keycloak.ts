@@ -53,8 +53,6 @@ export async function initializeKeycloak(): Promise<void> {
     };
 
     console.log($keycloak.token);
-    console.log($keycloak.idToken);
-    console.log($keycloak.refreshToken);
 
     $keycloak.onAuthSuccess = () => {
       console.log("on auth sccess");
