@@ -12,6 +12,8 @@ dist-ssr
 @app/gql/*.d.ts
 @app/gql/*.ts.map
 
+realm-export.json
+
 # Ignore DevSpace cache and log folder
 .devspace/
 .dockerconfig.json
