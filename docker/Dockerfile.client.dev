@@ -11,4 +11,4 @@ COPY ./@app/gql/ ./@app/gql
 
 RUN yarn install --pure-lockfile --non-interactive
 
-CMD ["yarn", "client", "dev"]
+ENTRYPOINT ["yarn", "client", "dev"]

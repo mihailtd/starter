@@ -1,5 +1,11 @@
 import { InMemoryCache } from "@apollo/client/cache";
-import { ApolloClient, HttpLink } from "@apollo/client/core";
+import {
+  ApolloClient,
+  ApolloLink,
+  concat,
+  HttpLink,
+} from "@apollo/client/core";
+import { useKeycloak } from "./keycloak";
 
 const defaultSettings = {
   assumeImmutableResults: true,
@@ -13,6 +19,18 @@ const link = new HttpLink({
 
 const cache = new InMemoryCache();
 
+const { token } = useKeycloak();
+
+const authMiddleware = new ApolloLink((operation, forward) => {
+  // add the authorization to the headers
+  operation.setContext({
+    headers: {
+      authorization: token.value ? `Bearer ${token.value}` : "",
+    },
+  });
+  return forward(operation);
+});
+
 export const apolloClient = new ApolloClient({
   ...defaultSettings,
   defaultOptions: {
@@ -21,5 +39,5 @@ export const apolloClient = new ApolloClient({
     },
   },
   cache,
-  link,
+  link: concat(authMiddleware, link),
 });

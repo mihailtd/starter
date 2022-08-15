@@ -9,4 +9,4 @@ COPY ./@app/server/ ./@app/server
 
 RUN yarn install --pure-lockfile --non-interactive
 
-CMD ["yarn", "server", "dev"]
+ENTRYPOINT ["yarn", "server", "dev"]

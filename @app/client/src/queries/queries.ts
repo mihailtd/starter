@@ -7,9 +7,15 @@ export const USERS = gql`
       createdAt
       email
       id
-      password
       updatedAt
-      username
+    }
+  }
+`;
+
+export const CREATE_USER = gql`
+  mutation CreateUser($input: CreateUserInput!) {
+    createUser(input: $input) {
+      clientMutationId
     }
   }
 `;

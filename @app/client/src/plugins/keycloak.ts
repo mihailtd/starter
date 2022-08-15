@@ -20,6 +20,10 @@ const initKeycloak = () => {
   const promise = $keycloak
     ?.init({
       onLoad: "check-sso",
+      checkLoginIframeInterval: 1000,
+      messageReceiveTimeout: 5000,
+      enableLogging: true,
+      responseMode: "query",
     })
     .finally(() => {
       pendingPromise.value = null;
@@ -45,11 +49,8 @@ export async function initializeKeycloak(): Promise<void> {
     };
     $keycloak.onTokenExpired = () => {};
     $keycloak.onAuthLogout = () => {
-      isAuthenticated.value = false;
-    };
-
-    $keycloak.onAuthLogout = () => {
       console.log("logout");
+      isAuthenticated.value = false;
     };
 
     console.log($keycloak.token);
