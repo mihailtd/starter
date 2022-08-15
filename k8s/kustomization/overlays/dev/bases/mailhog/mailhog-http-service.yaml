@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mailhog-http-service
+spec:
+  type: ClusterIP
+  selector:
+    app: mailhog
+  ports:
+    - name: mailhog-http
+      port: 80
+      targetPort: 8025

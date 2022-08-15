@@ -5,6 +5,7 @@ bases:
   - ../../bases/server
   - ../../bases/gql
   - ../../bases/keycloak
+  - bases/mailhog
   - bases/client
   - bases/server
 

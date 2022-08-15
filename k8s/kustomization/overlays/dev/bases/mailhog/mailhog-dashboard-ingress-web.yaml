@@ -1,0 +1,17 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: mailhog-ingress-web
+  namespace: starter
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`mailhog.local.starter.com`)
+      priority: 10
+      services:
+        - name: mailhog-http-service
+          port: 80
+      middlewares:
+        - name: https-redirect

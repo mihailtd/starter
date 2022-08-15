@@ -1,0 +1,8 @@
+namespace: starter
+
+resources:
+  - mailhog.yaml
+  - mailhog-smtp-service.yaml
+  - mailhog-http-service.yaml
+  - mailhog-dashboard-ingress.yaml
+  - mailhog-dashboard-ingress-web.yaml
